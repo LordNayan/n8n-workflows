@@ -1,0 +1,1444 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0cb531b5-a591-4484-83d0-13518ba864cc",
+              "name": "title",
+              "value": "={{ $('Fetch a Random Article').item.json.articles[0].title }}",
+              "type": "string"
+            },
+            {
+              "id": "905c9845-800d-4ab3-860b-5494e1ba7c0f",
+              "name": "url",
+              "value": "={{ $('Fetch a Random Article').item.json.articles[0].url }}",
+              "type": "string"
+            },
+            {
+              "id": "8deda793-60df-4cf6-ac6b-d80a6c39619c",
+              "name": "content",
+              "value": "={{ $('Remove EM Dashes').item.json.message.content.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1136,
+        240
+      ],
+      "id": "08376f1d-f369-4699-86af-4db763b07b0c",
+      "name": "Prepare Approval Payload"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        240
+      ],
+      "id": "f3a49c3b-bcbc-4bad-b458-c554df36a367",
+      "name": "Wait For Approval",
+      "webhookId": "c98b7b71-4813-4392-bb83-459f7ba4e09a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        448
+      ],
+      "id": "41e2111c-0c6a-4ba5-a7db-2fd27fb7b7fa",
+      "name": "Approved?"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Preview — Needs Approval\n\nTitle: {{ $json.title }}\nSource: {{ $json.url }}\n\nPost Body (draft):\n{{ $json.content.replace(/[\\\\`*_~|>#+\\-=!{}\\[\\]().]/g, '').replace(/<[^>]*>?/gm, '') }}\n\nApprove or reject below.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Approve",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=approve&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '')}}"
+                    }
+                  },
+                  {
+                    "text": "Reject",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=reject&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '') }}"
+                    }
+                  },
+                  {
+                    "text": "New Post",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=new-post"
+                    }
+                  },
+                  {
+                    "text": "New Image",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=new-image"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "a1cb6555-3903-47b7-b890-deab1fbf4825",
+      "name": "Send Approval Request",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -912,
+        240
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "3761dfd0-e2ff-4b94-9dad-9439764bf69f",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0cb531b5-a591-4484-83d0-13518ba864cc",
+              "name": "title",
+              "value": "={{ $('Fetch a Random Article').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "905c9845-800d-4ab3-860b-5494e1ba7c0f",
+              "name": "url",
+              "value": "={{ $('Fetch a Random Article').item.json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        768
+      ],
+      "id": "c7bf2b10-4bee-4f72-ad6f-77774a9f8656",
+      "name": "Prepare Rejection Payload"
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Remove EM Dashes').item.json.message.content.content }} #LearnWithNayan\n\nRead the full Blog: {{ $('Fetch a Random Article').item.json.url }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "f90f6ea8-de8d-4889-bc98-099259ae7485",
+      "name": "Create Linkedin Post",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        432,
+        256
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "VHltapEwLBeLEZ0g",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    // turn hyphen/en dash/em dash/horizontal bar into commas\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    // collapse multiple commas\n    .replace(/,+/g, ',')\n    // normalize spaces around commas (preserve newlines)\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    // remove leading/trailing spaces/tabs only (keep any \\n)\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    // drop a leading or trailing comma (with optional spaces/tabs)\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\n$input.first().json.message.content.content =\n  replaceDashesWithCommas($input.first().json.message.content.content);\n\nconsole.log($input.first().json.message.content.content);\n$execution.customData.set(\"image_prompt\",$input.first().json.message.content.prompt)\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1808,
+        240
+      ],
+      "id": "bd479cc1-71bc-4802-9be8-bbf758bdef52",
+      "name": "Remove EM Dashes"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "GPT-5-CHAT-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role: You are my LinkedIn content assistant. Your job is to write perfectly formatted LinkedIn posts that align with my brand voice, tone, and style based on the examples I've included here. Each post must revolve around summarising the provided content, which is a developer news, and avoid unsupported formatting.\n\nCritical Formatting Rules:\n\nThe generated post content should not exceed the 100-word limit. \n\nDon't use bold, italics or bullets.\n\nWhenever you want to add points, use emojis before the start of each pointer.\n\nStructure:\n\nAn Engaging Hook or an Interesting Question\n\nPersonal POV (first-person: \"I’ve seen…, I believe…, I think…\")\n\nInsights (trends/tools/case studies) in clear points\n\nClear spacing and new line wherever needed\n\nAdd emojis wherever required.\n\nCTA/question (\"What’s your take?\")\n\nRelavant 4-5 trending hashtags\n\nTrends: \nTie to recent news, tools, or debates (no generic advice).\n\nImage Prompt Rules:\nSuggest an AI image prompt related to the post. Based on the post context, it can be:\n- App interface or UX concept\n- Visual metaphor (e.g. “scaling servers as rocket engines”)\n- Stack or architecture illustration\n- Abstract concept visuals (e.g. speed, chaos, control, balance)\n- Tech-product mockups or feature highlights\n- Flowcharts, only suggest if explaining a process, framework, or system\n\nResponse Format (Strictly JSON):\n```json\n{\n  \"content\": \"<LinkedIn-ready post with proper formatting and no markdown symbols>\",\n  \"prompt\": \"<AI image generation prompt – relevant, visual, descriptive>\"\n}",
+              "role": "system"
+            },
+            {
+              "content": "=Examples of my past writings. Use them to align the new post with my brand voice, tone, and style,\n\n{{ $json.posts.join(\"\\n\\n\") }}",
+              "role": "system"
+            },
+            {
+              "content": "=You should use this content to write a new article for LinkedIn that adheres to my brand's voice, writing style, and tone. \nContent: {{ $('Fetch a Random Article').item.json.content }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -2160,
+        448
+      ],
+      "id": "cd1b18bb-fb2f-4498-81a2-a756cdb34cb1",
+      "name": "Generate Post Content",
+      "credentials": {
+        "openAiApi": {
+          "id": "eXO8FZmhMVDhTRz9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"posts\": [\n    \"CORS doesn't apply to Websockets. Wait! What? While building WebSocket and Socket.IO support for the web version of Sparrow API Tool, I learned something interesting: CORS doesn’t apply to WebSockets. Since WebSockets operate on their own protocol (ws:// or wss://) after the initial HTTP handshake, they aren’t restricted by CORS like HTTP requests. So, while an HTTP request might get blocked if sent directly from a browser instead of being routed through a proxy server, the same issue won't occur with a raw WebSocket connection. However, if you need to send custom headers with your WebSocket requests, a backend proxy server might still be necessary. On the other hand, Socket.IO has its own server-side CORS configuration, letting you control which origins can connect. Always something new to learn when building tools like Sparrow! We also have a giveaway active on our Instagram channel for some cool Sparrow Merchandise. Check out the pinned comment for more details.\",\n    \"ChatGPT or Stackoverflow? Recently I was able to build a completely functional vscode extension with the help of GPT-4o. I was able to complete this in a days time which would have taken multiple days if I relied solely on reading docs and searching Stackoverflow/Google. I think reading official docs is the best way to learn something but sometimes its just about doing a quick POC that can be implemented a lot faster with just being a little good at prompt engineering. So in this age of GenAI, do you use chatbots for generating boilerplates or starting on POCs? PS - Before this I had no knowledge of working with/creating a vscode extension. I had absolutely no idea on how to start.\",\n    \"But it runs on my Docker!!! I recently came across a strange problem where I was trying to setup a cron using crontab. The cron calls a simple python django rest api and sends email to users. All of this was made to run on Docker. The whole application was started, crontab was installed and cron was setup. All in the Dockerfile itself. It was running perfectly fine on my Docker Desktop, on my friends Docker Desktop and also on a hosted standalone VM. But strangely so, the cron was not getting invoked on the Kubernetes pod on which it was supposed to run. It would run if manually invoked but not in intervals. After weeks of trying to solve the problem, I had to shift to Advance Python Scheduler to do the same task from within the python code. Share in the comments if you think you can guess what the problem might be.\",\n  \"Normal People - You can achieve anything if you focus on ONE thing at a time. Meanwhile Software Engineers - 100+ Tabs opened Working on multiple requirements Having Multi screen setup for multiple projects Scrolling Instagram and sending memes while attending a scrum call\",\n  \"10x Faster Typescript COMPILER!!! Still there is an ongoing debate on why Microsoft didn't choose Rust or their own C# for this rewrite. Although, according to the team, Go was a better choice as it provided a similar structure and seamless transition. Had it been a ground-up rewrite and not a migration, Rust or C# would have been a better choice.\",\n  \"I recently started working on a Teams to Signal messenger bot after realizing that so many people outright hate using MS Teams, but since it's an industry standard, they cannot directly ditch it. My current goal is to support forwarding incoming text messages on Teams to a messenger like Signal. The second will be to give support for the reply mechanism from Signal and sync it to Teams. Coming to the technical stuff, I am thinking of using automation tools like Cypress or Playwright to do this. But it all boils down to the availability of public APIs of both messengers. I will try to document my progress here, as I might fail trying, like a lot of other times 😅 Let's see how it pans out. How would you approach this kind of problem?\",\n    \"Do you know about the require cache in Node.js? Lets say you have a js module that you have imported in a js file using require statement. It is highly possible that after a few iterations to your module code, the changes wont reflect even after you have reloaded the api server/modules. This happens because there is a module cache that happens. You need to invalidate it in order for the new changes to reflect. More on this here -\",\n    \"How important is Out-of-Box experience for an open source contributor? Nowadays I have been working on creating a seamless out-of-box experience for the new contributors of Sparrow API Tool. A poor app setup experience or hard-to-understand README file can be a serious dealbreaker for the community. I am emphasizing on the following things to make the setup as smooth as possible: 1) Created and hosted Docker images for various microservices like api-service and auth-service on DockerHub. 2) Created an all-in-one docker-compose file to set up everything from database to queue service in one command. 3) Created a migration script that generates a test user on app start—bypassing auth flow for instant contribution. 4) Documented multiple setup methods (Docker and non-Docker). 5) Pre-filled example .env files with required variables for copy-paste convenience. Let me know if you have suggestions to improve this further—I’m open to feedback!\"\n]\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2384,
+        448
+      ],
+      "id": "3c1751e7-b8cb-4fab-a5d5-3560490895d1",
+      "name": "Add Writing Examples",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const randomIndex = Math.floor(Math.random() * $('Get Latest Tech News').first().json.articles.length);\n\nreturn $('Get Latest Tech News').first().json.articles[randomIndex];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3280,
+        528
+      ],
+      "id": "b5e52a92-26af-4ea7-aa81-0c846a20d68a",
+      "name": "Fetch a Random Article"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "reject",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        208,
+        544
+      ],
+      "id": "0ba70962-2399-4d43-ade8-60c1c4b3f8b0",
+      "name": "Exit the Workflow?"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "7281360444",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "id": "f21d8892-603d-4b87-85f0-9d3e1e47cb5d",
+      "name": "Send Post Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1360,
+        240
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "9548d1bf-3a35-4721-98a6-6bf28fbeac18",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=Provide a new Tag to generate a new post.",
+        "replyMarkup": "forceReply",
+        "forceReply": {
+          "force_reply": "={{ true }}"
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "84ed7f52-de10-4fbc-b7d8-1ac9beb59722",
+      "name": "Ask for new tag",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        656,
+        112
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "ed8d7935-a54b-430f-af1e-e53495d4fde6",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "new-post",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        432,
+        496
+      ],
+      "id": "ca50db3e-bcec-4a9d-8fee-82f879049855",
+      "name": "Suggest New Post"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "model": "gpt-image-1",
+        "prompt": "={{ $json.headers.host }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        656,
+        576
+      ],
+      "id": "ee6ce5da-c084-44b1-ab2c-f3dbc894f231",
+      "name": "Generate Post Image",
+      "credentials": {
+        "openAiApi": {
+          "id": "eXO8FZmhMVDhTRz9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  if(typeof(item.json.message) === 'object'){\n    $input.first().json.headers.host = item.json.message.content.prompt\n    $input.first().json.headers.accept = item.json.message.content.content\n\n  }\n}\n// console.log(Object.keys($input.first().json.message))\nreturn $input.first();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        448
+      ],
+      "id": "8fdf140c-7e58-45c7-ae17-c5fba97feea9",
+      "name": "Merge Code"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=Approve or reject below.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Approve",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=approve&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '')}}"
+                    }
+                  },
+                  {
+                    "text": "Reject",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=reject&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '') }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "d1b0954c-57c8-4cf4-a78f-ca43a4fb2f1f",
+      "name": "Send Approval Request1",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1104,
+        576
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "7281360444",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "id": "b60984c3-9c3a-4def-a7b7-1223ed13b528",
+      "name": "Send Post Image1",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        880,
+        576
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        576
+      ],
+      "id": "06d4a14f-07dc-414b-8855-5105333decfa",
+      "name": "Wait For Approval1",
+      "webhookId": "139c56a4-5fdb-47b1-a3d4-15f158675783"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        576
+      ],
+      "id": "50067a3b-950a-4c04-9c71-a6a28882606b",
+      "name": "Approved?1",
+      "alwaysOutputData": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -3952,
+        624
+      ],
+      "id": "b85f8480-cfc5-4050-898a-bf33b39935cc",
+      "name": "Message Received",
+      "webhookId": "82db6aeb-c40e-4585-b939-9f6a66aa8d7b",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.message.text.toUpperCase().trim() }}"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "sortBy",
+              "value": "popularity"
+            },
+            {
+              "name": "domains",
+              "value": "thenextweb.com,infoq.com,dev.to,techcrunch.com"
+            },
+            {
+              "name": "apiKey",
+              "value": "2d27bd3193b24cf7ac4e944d32fc8aad"
+            },
+            {
+              "name": "from",
+              "value": "={{ DateTime.now().minus(3, 'days').format('yyyy-MM-dd') }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ DateTime.now().format('yyyy-MM-dd') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3728,
+        624
+      ],
+      "id": "cc303b75-1960-4e8d-bb01-75dc2361663c",
+      "name": "Get Latest Tech News"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fca4d3ea-7ed8-457c-afff-19537e5d20a9",
+              "leftValue": "={{ $json.totalResults }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3504,
+        624
+      ],
+      "id": "8d16f0a5-2697-4f8f-b501-838e834a9072",
+      "name": "News Exist?"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=No Posts found for the provided tag(s). Provide a new Tag to generate a post.",
+        "replyMarkup": "forceReply",
+        "forceReply": {
+          "force_reply": "={{ true }}"
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2d4264f9-c907-48e3-993f-d43028076c54",
+      "name": "No Post Found",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -3280,
+        720
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "ed8d7935-a54b-430f-af1e-e53495d4fde6",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Fetch Article Content1').item.json.social_image }}",
+        "options": {}
+      },
+      "id": "4ef9832c-5cbb-47e7-aa8a-e275339f2a61",
+      "name": "Download Post Image Again",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        208,
+        256
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Fetch a Random Article').item.json.urlToImage }}",
+        "options": {}
+      },
+      "id": "58ac8fb5-3a27-425a-9558-9177d5ef6b48",
+      "name": "Download Post Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1584,
+        240
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -464,
+        448
+      ],
+      "id": "2f38d6fc-b8ad-4a2a-b2de-30615919eebd",
+      "name": "Merge Responses"
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Remove EM Dashes').item.json.message.content.content }} #LearnWithNayan\n\nRead the full Blog: {{ $('Prepare Approval Payload').item.json.url }}",
+        "shareMediaCategory": "IMAGE",
+        "binaryPropertyName": "=data",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "6d4e5b35-3efb-422b-9c68-69aa4a922dfd",
+      "name": "Create Linkedin Post Again",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        2000,
+        528
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "VHltapEwLBeLEZ0g",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Dev News\n\nTitle - {{ $('Fetch a Random Article').item.json.title }}\n\nNews URL - {{ $('Fetch a Random Article').item.json.url }}\n\nLinkedIn URL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "1c41864c-0362-483b-a14e-a1c5c6dccdaa",
+      "name": "Send Post Created Message Again",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        2224,
+        528
+      ],
+      "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Dev.to  \nTitle - {{ $('Fetch a Random Article').item.json.title }}\n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "07985b6f-6f82-4af7-bd26-51f5ce6e659c",
+      "name": "Send Post Created Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        656,
+        304
+      ],
+      "webhookId": "6246bf0f-af4d-4607-8d73-35d4ea3686d5",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('Generate Post Image').first()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        528
+      ],
+      "id": "61e33e5f-7327-43fa-b1a5-bfcf338f45a9",
+      "name": "Extract Generated Image"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn post flow end",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "f819a4fd-a81f-438b-bcd1-80a643f9dd5f",
+      "name": "Send Exit Flow Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1776,
+        832
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a10875e9-a66f-4bc2-bd7d-55c2f198f73d",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=❌ LinkedIn post rejected\n\nTitle - {{ $json.title }}\nURL   - {{ $json.url }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5d90f41a-7f34-4043-a47d-3ba0b67d9b4a",
+      "name": "Send Post Rejected Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        656,
+        768
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a10875e9-a66f-4bc2-bd7d-55c2f198f73d",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        -2832,
+        448
+      ],
+      "id": "d331ddc0-b29a-4463-9ee3-925ddb540ac7",
+      "name": "Wait For Approval2",
+      "webhookId": "c98b7b71-4813-4392-bb83-459f7ba4e09a"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e07e33d6-9c82-434b-b8a7-8428893e8643"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "827c7f17-66d0-45a3-98c4-c8ffc004052c",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "exit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "55711320-b9e3-4cff-b006-695547415de2",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "random-post",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "191a8283-2489-46af-8b3c-18c173a04310",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "new-tag",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -2608,
+        496
+      ],
+      "id": "feb26e08-0558-49e0-9c93-ba2dc15019a0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=Do you want to process this Article?\n\nTitle: {{ $json.title }}\nSource: {{ $json.url }}\n\nApprove or reject below.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Proceed",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=approve&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '')}}"
+                    }
+                  },
+                  {
+                    "text": "Exit",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=exit&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '') }}"
+                    }
+                  },
+                  {
+                    "text": "Randomize",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=random-post"
+                    }
+                  },
+                  {
+                    "text": "New Tag",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=new-tag"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "8ecd12d7-0379-422e-819c-f6765782de21",
+      "name": "Proceed with the Article?",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -3056,
+        448
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "3761dfd0-e2ff-4b94-9dad-9439764bf69f",
+      "credentials": {
+        "telegramApi": {
+          "id": "R7NqBW0gVJQLgE0m",
+          "name": "News LinkedIn Post Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Prepare Approval Payload": {
+      "main": [
+        [
+          {
+            "node": "Send Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Approval": {
+      "main": [
+        [
+          {
+            "node": "Merge Responses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved?": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image Again",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exit the Workflow?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Wait For Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Rejection Payload": {
+      "main": [
+        [
+          {
+            "node": "Send Post Rejected Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Linkedin Post": {
+      "main": [
+        [
+          {
+            "node": "Send Post Created Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove EM Dashes": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post Content": {
+      "main": [
+        [
+          {
+            "node": "Remove EM Dashes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Responses",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Add Writing Examples": {
+      "main": [
+        [
+          {
+            "node": "Generate Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch a Random Article": {
+      "main": [
+        [
+          {
+            "node": "Proceed with the Article?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exit the Workflow?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Rejection Payload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Suggest New Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Post Image": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approval Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask for new tag": {
+      "main": [
+        []
+      ]
+    },
+    "Suggest New Post": {
+      "main": [
+        [
+          {
+            "node": "Ask for new tag",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post Image": {
+      "main": [
+        [
+          {
+            "node": "Send Post Image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Code": {
+      "main": [
+        [
+          {
+            "node": "Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval Request1": {
+      "main": [
+        [
+          {
+            "node": "Wait For Approval1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Post Image1": {
+      "main": [
+        [
+          {
+            "node": "Send Approval Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Approval1": {
+      "main": [
+        [
+          {
+            "node": "Approved?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved?1": {
+      "main": [
+        [
+          {
+            "node": "Extract Generated Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Exit Flow Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Received": {
+      "main": [
+        [
+          {
+            "node": "Get Latest Tech News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Latest Tech News": {
+      "main": [
+        [
+          {
+            "node": "News Exist?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News Exist?": {
+      "main": [
+        [
+          {
+            "node": "Fetch a Random Article",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Post Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Post Image Again": {
+      "main": [
+        [
+          {
+            "node": "Create Linkedin Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Post Image": {
+      "main": [
+        [
+          {
+            "node": "Send Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Responses": {
+      "main": [
+        [
+          {
+            "node": "Merge Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Linkedin Post Again": {
+      "main": [
+        [
+          {
+            "node": "Send Post Created Message Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Generated Image": {
+      "main": [
+        [
+          {
+            "node": "Create Linkedin Post Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Approval2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Add Writing Examples",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Exit Flow Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch a Random Article",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ask for new tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Proceed with the Article?": {
+      "main": [
+        [
+          {
+            "node": "Wait For Approval2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "559fe524ea9daad79a07a81fd3f64f8e3eeddd635511642951eaee3bf4d5ad7a"
+  }
+}
