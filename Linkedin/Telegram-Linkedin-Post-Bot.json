@@ -28,10 +28,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        -1136,
-        240
-      ],
+      "position": [-1136, 232],
       "id": "08376f1d-f369-4699-86af-4db763b07b0c",
       "name": "Prepare Approval Payload"
     },
@@ -42,10 +39,7 @@
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
-      "position": [
-        -688,
-        240
-      ],
+      "position": [-688, 232],
       "id": "f3a49c3b-bcbc-4bad-b458-c554df36a367",
       "name": "Wait For Approval",
       "webhookId": "c98b7b71-4813-4392-bb83-459f7ba4e09a"
@@ -77,10 +71,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        -16,
-        448
-      ],
+      "position": [-16, 448],
       "id": "41e2111c-0c6a-4ba5-a7db-2fd27fb7b7fa",
       "name": "Approved?"
     },
@@ -128,10 +119,7 @@
       "id": "a1cb6555-3903-47b7-b890-deab1fbf4825",
       "name": "Send Approval Request",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        -912,
-        240
-      ],
+      "position": [-912, 232],
       "typeVersion": 1.2,
       "webhookId": "3761dfd0-e2ff-4b94-9dad-9439764bf69f",
       "credentials": {
@@ -163,10 +151,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        432,
-        768
-      ],
+      "position": [432, 760],
       "id": "c7bf2b10-4bee-4f72-ad6f-77774a9f8656",
       "name": "Prepare Rejection Payload"
     },
@@ -182,10 +167,7 @@
       "id": "f90f6ea8-de8d-4889-bc98-099259ae7485",
       "name": "Create Linkedin Post",
       "type": "n8n-nodes-base.linkedIn",
-      "position": [
-        432,
-        256
-      ],
+      "position": [432, 256],
       "typeVersion": 1,
       "credentials": {
         "linkedInOAuth2Api": {
@@ -200,10 +182,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1808,
-        240
-      ],
+      "position": [-1808, 232],
       "id": "bd479cc1-71bc-4802-9be8-bbf758bdef52",
       "name": "Remove EM Dashes"
     },
@@ -235,10 +214,7 @@
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
-      "position": [
-        -2160,
-        448
-      ],
+      "position": [-2160, 448],
       "id": "cd1b18bb-fb2f-4498-81a2-a756cdb34cb1",
       "name": "Generate Post Content",
       "credentials": {
@@ -257,10 +233,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        -2384,
-        448
-      ],
+      "position": [-2384, 448],
       "id": "3c1751e7-b8cb-4fab-a5d5-3560490895d1",
       "name": "Add Writing Examples",
       "alwaysOutputData": false
@@ -271,10 +244,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -3280,
-        528
-      ],
+      "position": [-3280, 520],
       "id": "b5e52a92-26af-4ea7-aa81-0c846a20d68a",
       "name": "Fetch a Random Article"
     },
@@ -305,10 +275,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        208,
-        544
-      ],
+      "position": [208, 544],
       "id": "0ba70962-2399-4d43-ade8-60c1c4b3f8b0",
       "name": "Exit the Workflow?"
     },
@@ -322,10 +289,7 @@
       "id": "f21d8892-603d-4b87-85f0-9d3e1e47cb5d",
       "name": "Send Post Image",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        -1360,
-        240
-      ],
+      "position": [-1360, 232],
       "typeVersion": 1.2,
       "webhookId": "9548d1bf-3a35-4721-98a6-6bf28fbeac18",
       "credentials": {
@@ -350,10 +314,7 @@
       "id": "84ed7f52-de10-4fbc-b7d8-1ac9beb59722",
       "name": "Ask for new tag",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        656,
-        112
-      ],
+      "position": [656, 112],
       "typeVersion": 1.2,
       "webhookId": "ed8d7935-a54b-430f-af1e-e53495d4fde6",
       "credentials": {
@@ -390,10 +351,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        432,
-        496
-      ],
+      "position": [432, 496],
       "id": "ca50db3e-bcec-4a9d-8fee-82f879049855",
       "name": "Suggest New Post"
     },
@@ -406,10 +364,7 @@
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
-      "position": [
-        656,
-        576
-      ],
+      "position": [656, 568],
       "id": "ee6ce5da-c084-44b1-ab2c-f3dbc894f231",
       "name": "Generate Post Image",
       "credentials": {
@@ -425,10 +380,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -240,
-        448
-      ],
+      "position": [-240, 448],
       "id": "8fdf140c-7e58-45c7-ae17-c5fba97feea9",
       "name": "Merge Code"
     },
@@ -464,10 +416,7 @@
       "id": "d1b0954c-57c8-4cf4-a78f-ca43a4fb2f1f",
       "name": "Send Approval Request1",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        1104,
-        576
-      ],
+      "position": [1104, 568],
       "typeVersion": 1.2,
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
       "credentials": {
@@ -487,10 +436,7 @@
       "id": "b60984c3-9c3a-4def-a7b7-1223ed13b528",
       "name": "Send Post Image1",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        880,
-        576
-      ],
+      "position": [880, 568],
       "typeVersion": 1.2,
       "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
       "credentials": {
@@ -507,10 +453,7 @@
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
-      "position": [
-        1328,
-        576
-      ],
+      "position": [1328, 568],
       "id": "06d4a14f-07dc-414b-8855-5105333decfa",
       "name": "Wait For Approval1",
       "webhookId": "139c56a4-5fdb-47b1-a3d4-15f158675783"
@@ -542,10 +485,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        1552,
-        576
-      ],
+      "position": [1552, 568],
       "id": "50067a3b-950a-4c04-9c71-a6a28882606b",
       "name": "Approved?1",
       "alwaysOutputData": false,
@@ -553,17 +493,12 @@
     },
     {
       "parameters": {
-        "updates": [
-          "message"
-        ],
+        "updates": ["message"],
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
-      "position": [
-        -3952,
-        624
-      ],
+      "position": [-3952, 616],
       "id": "b85f8480-cfc5-4050-898a-bf33b39935cc",
       "name": "Message Received",
       "webhookId": "82db6aeb-c40e-4585-b939-9f6a66aa8d7b",
@@ -614,10 +549,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -3728,
-        624
-      ],
+      "position": [-3728, 616],
       "id": "cc303b75-1960-4e8d-bb01-75dc2361663c",
       "name": "Get Latest Tech News"
     },
@@ -647,10 +579,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [
-        -3504,
-        624
-      ],
+      "position": [-3504, 616],
       "id": "8d16f0a5-2697-4f8f-b501-838e834a9072",
       "name": "News Exist?"
     },
@@ -669,10 +598,7 @@
       "id": "2d4264f9-c907-48e3-993f-d43028076c54",
       "name": "No Post Found",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        -3280,
-        720
-      ],
+      "position": [-3280, 712],
       "typeVersion": 1.2,
       "webhookId": "ed8d7935-a54b-430f-af1e-e53495d4fde6",
       "credentials": {
@@ -684,16 +610,13 @@
     },
     {
       "parameters": {
-        "url": "={{ $('Fetch Article Content1').item.json.social_image }}",
+        "url": "={{ $('Fetch a Random Article').item.json.urlToImage }}",
         "options": {}
       },
       "id": "4ef9832c-5cbb-47e7-aa8a-e275339f2a61",
       "name": "Download Post Image Again",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [
-        208,
-        256
-      ],
+      "position": [208, 256],
       "typeVersion": 4.2
     },
     {
@@ -704,20 +627,14 @@
       "id": "58ac8fb5-3a27-425a-9558-9177d5ef6b48",
       "name": "Download Post Image",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [
-        -1584,
-        240
-      ],
+      "position": [-1584, 232],
       "typeVersion": 4.2
     },
     {
       "parameters": {},
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [
-        -464,
-        448
-      ],
+      "position": [-464, 448],
       "id": "2f38d6fc-b8ad-4a2a-b2de-30615919eebd",
       "name": "Merge Responses"
     },
@@ -734,10 +651,7 @@
       "id": "6d4e5b35-3efb-422b-9c68-69aa4a922dfd",
       "name": "Create Linkedin Post Again",
       "type": "n8n-nodes-base.linkedIn",
-      "position": [
-        2000,
-        528
-      ],
+      "position": [2000, 520],
       "typeVersion": 1,
       "credentials": {
         "linkedInOAuth2Api": {
@@ -758,10 +672,7 @@
       "id": "1c41864c-0362-483b-a14e-a1c5c6dccdaa",
       "name": "Send Post Created Message Again",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        2224,
-        528
-      ],
+      "position": [2224, 520],
       "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
       "typeVersion": 1.2,
       "credentials": {
@@ -783,10 +694,7 @@
       "id": "07985b6f-6f82-4af7-bd26-51f5ce6e659c",
       "name": "Send Post Created Message",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        656,
-        304
-      ],
+      "position": [656, 304],
       "webhookId": "6246bf0f-af4d-4607-8d73-35d4ea3686d5",
       "typeVersion": 1.2,
       "credentials": {
@@ -802,10 +710,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1776,
-        528
-      ],
+      "position": [1776, 520],
       "id": "61e33e5f-7327-43fa-b1a5-bfcf338f45a9",
       "name": "Extract Generated Image"
     },
@@ -820,10 +725,7 @@
       "id": "f819a4fd-a81f-438b-bcd1-80a643f9dd5f",
       "name": "Send Exit Flow Message",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        1776,
-        832
-      ],
+      "position": [1776, 832],
       "typeVersion": 1.2,
       "webhookId": "a10875e9-a66f-4bc2-bd7d-55c2f198f73d",
       "credentials": {
@@ -844,10 +746,7 @@
       "id": "5d90f41a-7f34-4043-a47d-3ba0b67d9b4a",
       "name": "Send Post Rejected Message",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        656,
-        768
-      ],
+      "position": [656, 760],
       "typeVersion": 1.2,
       "webhookId": "a10875e9-a66f-4bc2-bd7d-55c2f198f73d",
       "credentials": {
@@ -864,10 +763,7 @@
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
-      "position": [
-        -2832,
-        448
-      ],
+      "position": [-2832, 448],
       "id": "d331ddc0-b29a-4463-9ee3-925ddb540ac7",
       "name": "Wait For Approval2",
       "webhookId": "c98b7b71-4813-4392-bb83-459f7ba4e09a"
@@ -973,10 +869,7 @@
       },
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [
-        -2608,
-        496
-      ],
+      "position": [-2608, 488],
       "id": "feb26e08-0558-49e0-9c93-ba2dc15019a0",
       "name": "Switch"
     },
@@ -1024,10 +917,7 @@
       "id": "8ecd12d7-0379-422e-819c-f6765782de21",
       "name": "Proceed with the Article?",
       "type": "n8n-nodes-base.telegram",
-      "position": [
-        -3056,
-        448
-      ],
+      "position": [-3056, 448],
       "typeVersion": 1.2,
       "webhookId": "3761dfd0-e2ff-4b94-9dad-9439764bf69f",
       "credentials": {
@@ -1036,6 +926,18 @@
           "name": "News LinkedIn Post Bot"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "# LinkedIn Post Automation with Approval Workflow\n\n## Overview\nThis automated workflow fetches tech news articles, generates LinkedIn post content using AI, sends it for approval via Telegram, and publishes to LinkedIn upon approval.\n\n## Key Features\n- **Automated Content Creation**: Uses OpenAI to generate engaging LinkedIn posts from tech news articles\n- **Approval System**: Sends posts for human approval via Telegram with interactive buttons\n- **Flexible Options**: Allows approving, rejecting, requesting new posts, or providing new tags\n- **LinkedIn Integration**: Automatically publishes approved posts with proper formatting\n- **Image Handling**: Includes article images and supports AI-generated images\n\n## Workflow Steps\n1. **Trigger**: Starts when a message with a tech topic tag is received in Telegram\n2. **Article Fetching**: \n   - Queries NewsAPI for relevant tech articles\n   - Selects a random article to process\n3. **Content Generation**:\n   - Uses GPT to create LinkedIn-ready content\n   - Formats content according to brand guidelines\n4. **Approval Process**:\n   - Sends draft post to Telegram for review\n   - Provides Approve/Reject/New Post options\n5. **Publication**:\n   - Posts approved content to LinkedIn\n   - Sends confirmation message with post link\n\n## Configuration Requirements\n- Telegram bot credentials\n- LinkedIn API access\n- OpenAI API key\n- NewsAPI key\n\n## Usage Options\n- **Approve**: Publish the generated post\n- **Reject**: Discard the current post\n- **New Post**: Generate a different post from same article\n- **New Tag**: Request content for a different tech topic\n- **New Image**: Request an ai generated image for a different tech topic\n",
+        "height": 1056,
+        "width": 1200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-1824, -944],
+      "typeVersion": 1,
+      "id": "f3d2f4f1-0d0e-41e8-b53a-c216f5771357",
+      "name": "Sticky Note"
     }
   ],
   "connections": {
