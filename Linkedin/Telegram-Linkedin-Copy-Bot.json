@@ -1,0 +1,522 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        -80
+      ],
+      "id": "efa19465-559c-415d-9b1e-d973deb325cf",
+      "name": "Message Received",
+      "webhookId": "17d504a4-d0ce-47f5-95e1-dbc19cd3c3ce",
+      "credentials": {
+        "telegramApi": {
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "GPT-5-CHAT-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role: You are my expert LinkedIn content assistant. Your primary goal is to rewrite and rephrase existing LinkedIn content so that it captures the core message and insights of the original but is expressed in my unique brand voice, tone, and style.\n\nContext: I will provide you with 1) an existing post I want to reshare, and 2) examples of my past writing. Analyze my writing style from the examples—including my sentence structure, common phrases, level of formality, and use of emojis—and apply that style to the new post.\n\nCritical Rules & Formatting:\n\nDO NOT create a word-for-word copy. Paraphrase the ideas completely in your own words, informed by my style.\n\nWord Limit: The final post must not exceed 150 words.\n\nFormatting: Do not use markdown, bold, italics, or bullet points. Use only plain text.\n\nStructure: Use line breaks for clear spacing. When listing points, start each line with a relevant emoji (e.g., →, , , ).\n\nRequired Elements:\n\nAn engaging hook or question.\n\nA first-person perspective (\"I\", \"my\").\n\nClear insights or key points.\n\nA call-to-action (CTA) or question for the audience.\n\n4-5 relevant, trending hashtags.\n\nResponse Format: You must always respond with a valid JSON object, using the following structure:\n\n{\n  \"content\": \"The fully formatted LinkedIn post, written in my style and adhering to all the rules above.\"\n}",
+              "role": "system"
+            },
+            {
+              "content": "=Examples of my past writings. Use them to align the new post with my brand voice, tone, and style,\n\n{{ $json.posts.join(\"\\n\\n\") }}",
+              "role": "system"
+            },
+            {
+              "content": "=Rewrite this article for LinkedIn that adheres to my brand's voice, writing style, and tone. \nContent: {{ $('Extract HTML Content').item.json.content }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        880,
+        -80
+      ],
+      "id": "493583b7-2348-4aa0-bca8-b7dec16e97ee",
+      "name": "Generate Post Content",
+      "credentials": {
+        "openAiApi": {
+          "id": "5Kzt6hGSZ1JHZqWN",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"posts\": [\n    \"CORS doesn't apply to Websockets. Wait! What? While building WebSocket and Socket.IO support for the web version of Sparrow API Tool, I learned something interesting: CORS doesn’t apply to WebSockets. Since WebSockets operate on their own protocol (ws:// or wss://) after the initial HTTP handshake, they aren’t restricted by CORS like HTTP requests. So, while an HTTP request might get blocked if sent directly from a browser instead of being routed through a proxy server, the same issue won't occur with a raw WebSocket connection. However, if you need to send custom headers with your WebSocket requests, a backend proxy server might still be necessary. On the other hand, Socket.IO has its own server-side CORS configuration, letting you control which origins can connect. Always something new to learn when building tools like Sparrow! We also have a giveaway active on our Instagram channel for some cool Sparrow Merchandise. Check out the pinned comment for more details.\",\n    \"ChatGPT or Stackoverflow? Recently I was able to build a completely functional vscode extension with the help of GPT-4o. I was able to complete this in a days time which would have taken multiple days if I relied solely on reading docs and searching Stackoverflow/Google. I think reading official docs is the best way to learn something but sometimes its just about doing a quick POC that can be implemented a lot faster with just being a little good at prompt engineering. So in this age of GenAI, do you use chatbots for generating boilerplates or starting on POCs? PS - Before this I had no knowledge of working with/creating a vscode extension. I had absolutely no idea on how to start.\",\n    \"But it runs on my Docker!!! I recently came across a strange problem where I was trying to setup a cron using crontab. The cron calls a simple python django rest api and sends email to users. All of this was made to run on Docker. The whole application was started, crontab was installed and cron was setup. All in the Dockerfile itself. It was running perfectly fine on my Docker Desktop, on my friends Docker Desktop and also on a hosted standalone VM. But strangely so, the cron was not getting invoked on the Kubernetes pod on which it was supposed to run. It would run if manually invoked but not in intervals. After weeks of trying to solve the problem, I had to shift to Advance Python Scheduler to do the same task from within the python code. Share in the comments if you think you can guess what the problem might be.\",\n  \"Normal People - You can achieve anything if you focus on ONE thing at a time. Meanwhile Software Engineers - 100+ Tabs opened Working on multiple requirements Having Multi screen setup for multiple projects Scrolling Instagram and sending memes while attending a scrum call\",\n  \"10x Faster Typescript COMPILER!!! Still there is an ongoing debate on why Microsoft didn't choose Rust or their own C# for this rewrite. Although, according to the team, Go was a better choice as it provided a similar structure and seamless transition. Had it been a ground-up rewrite and not a migration, Rust or C# would have been a better choice.\",\n  \"I recently started working on a Teams to Signal messenger bot after realizing that so many people outright hate using MS Teams, but since it's an industry standard, they cannot directly ditch it. My current goal is to support forwarding incoming text messages on Teams to a messenger like Signal. The second will be to give support for the reply mechanism from Signal and sync it to Teams. Coming to the technical stuff, I am thinking of using automation tools like Cypress or Playwright to do this. But it all boils down to the availability of public APIs of both messengers. I will try to document my progress here, as I might fail trying, like a lot of other times 😅 Let's see how it pans out. How would you approach this kind of problem?\",\n    \"Do you know about the require cache in Node.js? Lets say you have a js module that you have imported in a js file using require statement. It is highly possible that after a few iterations to your module code, the changes wont reflect even after you have reloaded the api server/modules. This happens because there is a module cache that happens. You need to invalidate it in order for the new changes to reflect. More on this here -\",\n    \"How important is Out-of-Box experience for an open source contributor? Nowadays I have been working on creating a seamless out-of-box experience for the new contributors of Sparrow API Tool. A poor app setup experience or hard-to-understand README file can be a serious dealbreaker for the community. I am emphasizing on the following things to make the setup as smooth as possible: 1) Created and hosted Docker images for various microservices like api-service and auth-service on DockerHub. 2) Created an all-in-one docker-compose file to set up everything from database to queue service in one command. 3) Created a migration script that generates a test user on app start—bypassing auth flow for instant contribution. 4) Documented multiple setup methods (Docker and non-Docker). 5) Pre-filled example .env files with required variables for copy-paste convenience. Let me know if you have suggestions to improve this further—I’m open to feedback!\"\n]\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -80
+      ],
+      "id": "fac3a3a9-ff87-4f74-9b16-a0060244219b",
+      "name": "Add Writing Examples",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Copy Article Flow Exit",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a919430e-424d-4495-a61f-5222439edfbf",
+      "name": "Send Exit Flow Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        2176,
+        16
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "e9987248-092d-401c-82eb-248b2d57b1e6",
+      "credentials": {
+        "telegramApi": {
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    // turn hyphen/en dash/em dash/horizontal bar into commas\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    // collapse multiple commas\n    .replace(/,+/g, ',')\n    // normalize spaces around commas (preserve newlines)\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    // remove leading/trailing spaces/tabs only (keep any \\n)\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    // drop a leading or trailing comma (with optional spaces/tabs)\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\n$input.first().json.message.content =\n  replaceDashesWithCommas($input.first().json.message.content.content);\n\nreturn {content: $input.first().json.message.content}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        -80
+      ],
+      "id": "b5b4c5f0-0484-494a-9f98-fdd7b14c4162",
+      "name": "Remove EM Dashes"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -80
+      ],
+      "id": "a2306049-914b-4969-ac7d-6651a8f466b2",
+      "name": "Wait For Approval",
+      "webhookId": "29553916-9873-47ce-ad51-3205eab7d92a"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Preview — Needs Approval\n\nPost Body (draft):\n{{ $json.content.replace(/[\\\\`*_{}[\\]()<>#+=!|~:.-]/g, '').replace(/\\s{2,}/g, ' ').trim() }}\nApprove or reject below.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Approve",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=approve"
+                    }
+                  },
+                  {
+                    "text": "Reject",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=reject"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "42b7ee24-8ce5-4796-9477-77b9da26cfd0",
+      "name": "Send Approval Request",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1504,
+        -80
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "6ac0ceb8-7dc4-4be5-9db7-1efb54bcfea7",
+      "credentials": {
+        "telegramApi": {
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1952,
+        -80
+      ],
+      "id": "d43a35e7-acf6-446c-9957-48c031c0f882",
+      "name": "Approved?"
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Remove EM Dashes').item.json.content }} #LearnWithNayan\n\nCredits: {{ $('Message Received').item.json.message.text }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "30f97f44-862a-4349-a5e9-f22bc5b0157e",
+      "name": "Create Linkedin Post",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        2400,
+        -176
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "29368c8e-8af5-4c0d-b3f4-d16eccdcc615",
+      "name": "Send Post Created Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        2624,
+        -176
+      ],
+      "webhookId": "020b8162-d8df-4dd4-9e41-e7d1715fcf00",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.message.text.trim() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        -80
+      ],
+      "id": "0c69185e-47f2-48ed-aa5b-961e1b9e6cbf",
+      "name": "Get Linkedin Article"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "content",
+              "cssSelector": "meta[name='description']",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "image",
+              "cssSelector": "ul.feed-images-content img[data-delayed-url]",
+              "returnValue": "attribute",
+              "attribute": "data-delayed-url"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        -80
+      ],
+      "id": "a65f91a3-b05d-42ed-a6b4-c442fd035234",
+      "name": "Extract HTML Content"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Extract HTML Content').item.json.image }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "e",
+              "value": "2147483647"
+            },
+            {
+              "name": "v",
+              "value": "beta"
+            },
+            {
+              "name": "t",
+              "value": "ZIQAKP0SpO2ddLByjY3kUmj7lfpVT_oUhQgI35FTITw"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "PostmanRuntime/7.45.0"
+            },
+            {
+              "name": "Accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "name": "Postman-Token",
+              "value": "9d23a25a-3617-41b7-b871-623ced2b22dc"
+            },
+            {
+              "name": "Host",
+              "value": "media.licdn.com"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6867dd8c-a381-4ac3-9f7f-8f03ddeb5436",
+      "name": "Download Post Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2176,
+        -176
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "# LinkedIn Copy Bot\nAn automated n8n workflow that rewrites and shares LinkedIn content in my unique voice.\n\n## 🔄 Flow\nTrigger: Receive LinkedIn URL via Telegram bot\nProcess: Fetch post content and extract text/image\nRewrite: AI regenerates content matching my writing style\nApprove: I review and approve the draft via Telegram inline keyboard\nPublish: Auto-posts to LinkedIn upon approval\nConfirm: Sends me the post link\n\n## 🛠 Key Features\nVoice Matching: Uses my past writing examples to maintain brand tone\nManual Approval: Requires explicit approval before posting\nMedia Handling: Preserves and attaches the original post image\nFormatting: Ensures clean LinkedIn-compatible formatting\nCredits: Automatically credits original post in final share",
+        "height": 432,
+        "width": 656
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1344,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "60c61023-0a57-4ba9-a467-c8b0f687152c",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "Message Received": {
+      "main": [
+        [
+          {
+            "node": "Get Linkedin Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post Content": {
+      "main": [
+        [
+          {
+            "node": "Remove EM Dashes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Writing Examples": {
+      "main": [
+        [
+          {
+            "node": "Generate Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove EM Dashes": {
+      "main": [
+        [
+          {
+            "node": "Send Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Approval": {
+      "main": [
+        [
+          {
+            "node": "Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Wait For Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved?": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Exit Flow Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Linkedin Post": {
+      "main": [
+        [
+          {
+            "node": "Send Post Created Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Linkedin Article": {
+      "main": [
+        [
+          {
+            "node": "Extract HTML Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract HTML Content": {
+      "main": [
+        [
+          {
+            "node": "Add Writing Examples",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Post Image": {
+      "main": [
+        [
+          {
+            "node": "Create Linkedin Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "8443f10082278c46aa5cf3acf8ff0f70061a2c58bce76efac814b16290845177"
+  }
+}
