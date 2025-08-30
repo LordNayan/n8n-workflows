@@ -610,7 +610,7 @@
     {
       "parameters": {
         "chatId": "7281360444",
-        "text": "=LinkedIn Post Sent Successfully - Dev News\n\nTitle - {{ $('Fetch a Random Article').item.json.title }}\n\nNews URL - {{ $('Fetch a Random Article').item.json.url }}\n\nLinkedIn URL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
         "replyMarkup": "inlineKeyboard",
         "additionalFields": {
           "appendAttribution": false
