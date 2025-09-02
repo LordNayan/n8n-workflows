@@ -418,8 +418,8 @@
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
       "credentials": {
         "telegramApi": {
-          "id": "qlooKAX1PILExRwr",
-          "name": "News LinkedIn Post bot - Nayan"
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
         }
       }
     },
@@ -441,8 +441,8 @@
       "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
       "credentials": {
         "telegramApi": {
-          "id": "qlooKAX1PILExRwr",
-          "name": "News LinkedIn Post bot - Nayan"
+          "id": "sJRLyMmCDHvUgMGN",
+          "name": "Linkedin Copy Bot"
         }
       }
     },
