@@ -11,7 +11,7 @@
       "typeVersion": 1.2,
       "position": [
         -16,
-        112
+        32
       ],
       "id": "efa19465-559c-415d-9b1e-d973deb325cf",
       "name": "Message Received",
@@ -53,7 +53,7 @@
       "typeVersion": 1.8,
       "position": [
         880,
-        112
+        32
       ],
       "id": "493583b7-2348-4aa0-bca8-b7dec16e97ee",
       "name": "Generate Post Content",
@@ -75,7 +75,7 @@
       "typeVersion": 3.4,
       "position": [
         656,
-        112
+        32
       ],
       "id": "fac3a3a9-ff87-4f74-9b16-a0060244219b",
       "name": "Add Writing Examples",
@@ -93,8 +93,8 @@
       "name": "Send Exit Flow Message",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        3744,
-        16
+        3696,
+        -64
       ],
       "typeVersion": 1.2,
       "webhookId": "e9987248-092d-401c-82eb-248b2d57b1e6",
@@ -112,8 +112,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1280,
-        -32
+        1232,
+        -112
       ],
       "id": "b5b4c5f0-0484-494a-9f98-fdd7b14c4162",
       "name": "Remove EM Dashes"
@@ -121,13 +121,15 @@
     {
       "parameters": {
         "resume": "webhook",
+        "limitWaitTime": true,
+        "resumeUnit": "minutes",
         "options": {}
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
       "position": [
-        1728,
-        -32
+        1680,
+        -112
       ],
       "id": "a2306049-914b-4969-ac7d-6651a8f466b2",
       "name": "Wait For Approval",
@@ -172,8 +174,8 @@
       "name": "Send Approval Request",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        1504,
-        -32
+        1456,
+        -112
       ],
       "typeVersion": 1.2,
       "webhookId": "6ac0ceb8-7dc4-4be5-9db7-1efb54bcfea7",
@@ -197,8 +199,8 @@
       "name": "Create Linkedin Post",
       "type": "n8n-nodes-base.linkedIn",
       "position": [
-        2400,
-        -176
+        2576,
+        -256
       ],
       "typeVersion": 1,
       "credentials": {
@@ -221,8 +223,8 @@
       "name": "Send Post Created Message",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        2624,
-        -176
+        2800,
+        -352
       ],
       "webhookId": "020b8162-d8df-4dd4-9e41-e7d1715fcf00",
       "typeVersion": 1.2,
@@ -242,7 +244,7 @@
       "typeVersion": 4.2,
       "position": [
         208,
-        112
+        32
       ],
       "id": "0c69185e-47f2-48ed-aa5b-961e1b9e6cbf",
       "name": "Get Linkedin Article"
@@ -272,7 +274,7 @@
       "typeVersion": 1.2,
       "position": [
         432,
-        112
+        32
       ],
       "id": "a65f91a3-b05d-42ed-a6b4-c442fd035234",
       "name": "Extract HTML Content"
@@ -336,8 +338,8 @@
       "name": "Download Post Image",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2176,
-        -176
+        2352,
+        -256
       ],
       "typeVersion": 4.2
     },
@@ -360,14 +362,14 @@
       "parameters": {
         "resource": "image",
         "model": "gpt-image-1",
-        "prompt": "={{ $json.headers.host }}",
+        "prompt": "={{ $('Merge Code').item.json.headers.host }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        2624,
-        184
+        2576,
+        112
       ],
       "id": "e2585218-9e65-413b-a788-de925720edaa",
       "name": "Generate Post Image",
@@ -391,13 +393,19 @@
                   {
                     "text": "Approve",
                     "additionalFields": {
-                      "url": "={{$execution.resumeUrl}}?action=approve&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '')}}"
+                      "url": "={{$execution.resumeUrl}}?action=approve"
                     }
                   },
                   {
                     "text": "Reject",
                     "additionalFields": {
-                      "url": "={{$execution.resumeUrl}}?action=reject&title={{ $json.title.replace(/[^a-zA-Z0-9]/g, '') }}"
+                      "url": "={{$execution.resumeUrl}}?action=reject"
+                    }
+                  },
+                  {
+                    "text": "Retry",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=image"
                     }
                   }
                 ]
@@ -411,8 +419,8 @@
       "name": "Send Approval Request1",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        3072,
-        184
+        3024,
+        48
       ],
       "typeVersion": 1.2,
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
@@ -434,8 +442,8 @@
       "name": "Send Post Image1",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        2848,
-        184
+        2800,
+        48
       ],
       "typeVersion": 1.2,
       "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
@@ -454,8 +462,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1,
       "position": [
-        3296,
-        184
+        3248,
+        48
       ],
       "id": "f73d10e8-79d4-40ab-be91-7792a4ce510f",
       "name": "Wait For Approval1",
@@ -540,47 +548,11 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1952,
-        -48
+        1904,
+        -128
       ],
       "id": "8835e23a-32a5-480e-8515-881a6ba684fa",
       "name": "Switch"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 1
-          },
-          "conditions": [
-            {
-              "id": "af0b5e17-0c96-4e4d-b71a-bd2bbcbb41e1",
-              "leftValue": "={{ $json.query.action }}",
-              "rightValue": "approve",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        3520,
-        184
-      ],
-      "id": "3067c219-d2d3-4d64-bf11-064b9619b86f",
-      "name": "Approved?1",
-      "alwaysOutputData": false,
-      "notesInFlow": false
     },
     {
       "parameters": {
@@ -596,8 +568,8 @@
       "name": "Create Linkedin Post Again",
       "type": "n8n-nodes-base.linkedIn",
       "position": [
-        3968,
-        232
+        3920,
+        160
       ],
       "typeVersion": 1,
       "credentials": {
@@ -620,8 +592,8 @@
       "name": "Send Post Created Message Again",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        4192,
-        232
+        4144,
+        160
       ],
       "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
       "typeVersion": 1.2,
@@ -639,8 +611,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3744,
-        232
+        3696,
+        160
       ],
       "id": "83905ee6-0b39-4bec-ba5c-836a6b759cd5",
       "name": "Extract Generated Image"
@@ -652,8 +624,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2400,
-        184
+        2352,
+        112
       ],
       "id": "a4889ff5-5dce-44d9-a668-33d0245c56ca",
       "name": "Merge Code"
@@ -663,11 +635,154 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2176,
-        184
+        2128,
+        112
       ],
       "id": "fcc7ada2-3a0f-4dad-8ab5-77ee334d921e",
       "name": "Merge Responses"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "817922d9-c16b-43ca-9032-fca6f79193d6",
+              "leftValue": "={{ $('Extract HTML Content').first().json.image }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2128,
+        -352
+      ],
+      "id": "6ba8b864-f0bd-4e8d-94f2-70bc5c09536e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55fa80de-9fcb-42e6-a63e-7bb7d0686999"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fb972cfa-b778-4326-b04f-ced9bf147fd9",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "15c3ffb3-2e94-4479-b1c7-6679337cc2ca",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3472,
+        96
+      ],
+      "id": "8ec6a050-8406-4cfe-a725-9cbd1205196a",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Remove EM Dashes').item.json.content }} #LearnWithNayan\n\nCredits: {{ $('Message Received').item.json.message.text }}",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "1d53e2d0-3157-4bb6-a120-c71ba1342964",
+      "name": "Create Linkedin Post1",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        2576,
+        -448
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
     }
   ],
   "connections": {
@@ -823,7 +938,7 @@
       "main": [
         [
           {
-            "node": "Approved?1",
+            "node": "Switch1",
             "type": "main",
             "index": 0
           }
@@ -834,7 +949,7 @@
       "main": [
         [
           {
-            "node": "Download Post Image",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -849,24 +964,6 @@
         [
           {
             "node": "Merge Responses",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Approved?1": {
-      "main": [
-        [
-          {
-            "node": "Extract Generated Image",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Send Exit Flow Message",
             "type": "main",
             "index": 0
           }
@@ -911,6 +1008,60 @@
         [
           {
             "node": "Merge Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Linkedin Post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Extract Generated Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Exit Flow Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Linkedin Post1": {
+      "main": [
+        [
+          {
+            "node": "Send Post Created Message",
             "type": "main",
             "index": 0
           }
