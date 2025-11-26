@@ -1,0 +1,676 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -896,
+        80
+      ],
+      "id": "dbad970c-c831-4f80-8c5e-0b327fe5c475",
+      "name": "Message Received",
+      "webhookId": "11111111-1111-1111-1111-111111111111",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst text = (item.json.message.text || '').trim();\nconst lower = text.toLowerCase();\n\nlet mode;\nif (lower === 'start' || lower.startsWith('start ')) {\n  mode = 'start';\n} else if (lower === 'yes' || lower === 'post') {\n  mode = 'approve_post';\n} else if (text.includes('http://') || text.includes('https://')) {\n  mode = 'url';\n} else {\n  mode = 'keyword';\n}\n\nreturn [{\n  json: {\n    mode,\n    text,\n    lower,\n    chatId: item.json.message.chat.id\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        80
+      ],
+      "id": "e022a824-d648-4431-bfb7-d768c9179869",
+      "name": "Parse Command"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "rule-start"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "keyword",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "rule-keyword"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "url",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "rule-url"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.mode }}",
+                    "rightValue": "approve_post",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "rule-approve"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -448,
+        48
+      ],
+      "id": "6ab0914d-caaf-4bbf-b126-1fbe01646568",
+      "name": "Switch Mode"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n\"rssSources\": [\n{\"name\": \"Dropbox Tech Blog\", \"url\": \"https://dropbox.tech/feed\"},\n{\"name\": \"Microsoft Developer Blogs\", \"url\": \"https://devblogs.microsoft.com/landing\"},\n\n{\"name\": \"Slack Engineering\", \"url\": \"https://slack.engineering/feed/\"},\n\n{\"name\": \"GitHub Engineering\", \"url\": \"https://github.blog/engineering/feed/\"},\n\n{\"name\": \"AWS Architecture Blog\", \"url\": \"https://aws.amazon.com/blogs/architecture/feed/\"},\n\n{\"name\": \"Google Cloud Blog\", \"url\": \"https://cloudblog.withgoogle.com/rss/\"},\n\n{\"name\": \"Meta Engineering\", \"url\": \"https://engineering.fb.com/feed/\"},\n{\"name\": \"DigitalOcean Blog\", \"url\": \"https://www.digitalocean.com/blog/rss\"},\n{\"name\": \"Cloudflare Blog\", \"url\": \"https://blog.cloudflare.com/rss/\"},\n{\"name\": \"MongoDB Blog\", \"url\": \"https://www.mongodb.com/blog/rss\"}\n]\n}",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        -112
+      ],
+      "id": "986317a5-fff0-449f-b213-5e1e2d70a69f",
+      "name": "Set RSS Sources"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst sources = item.json.rssSources || [];\nconst randomNumber = Math.floor(Math.random() * 10);\nreturn   {json: {\n    feedUrl: sources[randomNumber].url\n  }}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -112
+      ],
+      "id": "3baac6a7-7307-44bf-950c-4cdfcfadd812",
+      "name": "Fan Out RSS Sources"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.feedUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -112
+      ],
+      "id": "ce329440-e031-4a84-a6ff-91693f874c91",
+      "name": "RSS Feed Read"
+    },
+    {
+      "parameters": {
+        "jsCode": "function cleanSnippet(raw = '') {\n  let t = raw.toString();\n\n  // remove <script>...</script>\n  t = t.replace(/<script\\b[^>]*>[\\s\\S]*?<\\/script>/gi, '');\n\n  // remove <style>...</style> and all CSS blocks\n  t = t.replace(/<style\\b[^>]*>[\\s\\S]*?<\\/style>/gi, '');\n  t = t.replace(/@font-face[\\s\\S]*?}/gi, '');\n  t = t.replace(/#[^{]+{[\\s\\S]*?}/gi, '');\n  t = t.replace(/\\.[^{]+{[\\s\\S]*?}/gi, '');\n\n  // remove HTML tags\n  t = t.replace(/<[^>]+>/g, '');\n\n  // remove escaped \\n or actual newlines\n  t = t.replace(/\\\\n/g, ' ');\n  t = t.replace(/\\n/g, ' ');\n\n  // collapse multiple spaces\n  t = t.replace(/\\s+/g, ' ');\n\n  return t.trim();\n}\n\n\nconst items = $input.all();\nconst parse = $('Parse Command').first().json;\nconst keyword = parse.mode === 'keyword' ? parse.lower : '';\n\nlet articles = [];\n\nfor (const item of items) {\n  const j = item.json;\n  const title = j.title || '';\n  const link = j.link || j.id || '';\n  \n  // cleaned description\n  const rawDesc = j[\"content:encodedSnippet\"] || j.contentSnippet || '';\n  const description = cleanSnippet(rawDesc);\n\n  const pubDate = j.isoDate || j.pubDate || '';\n\n  if (!title || !link) continue;\n\n  if (keyword) {\n    const text = (title + ' ' + description).toLowerCase();\n    if (!text.includes(keyword)) continue;\n  }\n\n  articles.push({\n    title,\n    link,\n    description,\n    pubDate\n  });\n}\n\narticles.sort((a, b) => {\n  const da = new Date(a.pubDate || 0).getTime();\n  const db = new Date(b.pubDate || 0).getTime();\n  return db - da;\n});\n\narticles = articles.slice(0, 5);\n\nconst staticData = $getWorkflowStaticData('global');\nstaticData.lastArticles = articles;\n\nreturn [{ json: { articles } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -112
+      ],
+      "id": "bec22213-463d-4457-8c7a-974a7d07bef6",
+      "name": "Collect Articles"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Parse Command\"].json.chatId }}",
+        "text": "={{'Top engineering articles:\\n\\n' + $json.articles.map((a,i)=> (i+1) + '. ' + a.title + '\\n' + a.link).join('\\n\\n') + '\\n\\nReply with any article URL from above to generate a LinkedIn post.'}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        -112
+      ],
+      "id": "8f7a3ff9-4e07-4354-8295-1a08f4ffc244",
+      "name": "Send Article List",
+      "webhookId": "22222222-2222-2222-2222-222222222222",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.text }}",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -224,
+        80
+      ],
+      "id": "857e6697-9fe9-4dd2-a31a-118b89911faa",
+      "name": "Get Article HTML"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"posts\": [\n    \"CORS doesn't apply to Websockets. Wait! What? While building WebSocket and Socket.IO support for the web version of Sparrow API Tool, I learned something interesting: CORS doesn’t apply to WebSockets. Since WebSockets operate on their own protocol (ws:// or wss://) after the initial HTTP handshake, they aren’t restricted by CORS like HTTP requests. So, while an HTTP request might get blocked if sent directly from a browser instead of being routed through a proxy server, the same issue won't occur with a raw WebSocket connection. However, if you need to send custom headers with your WebSocket requests, a backend proxy server might still be necessary. On the other hand, Socket.IO has its own server-side CORS configuration, letting you control which origins can connect. Always something new to learn when building tools like Sparrow! We also have a giveaway active on our Instagram channel for some cool Sparrow Merchandise. Check out the pinned comment for more details.\",\n    \"ChatGPT or Stackoverflow? Recently I was able to build a completely functional vscode extension with the help of GPT-4o. I was able to complete this in a days time which would have taken multiple days if I relied solely on reading docs and searching Stackoverflow/Google. I think reading official docs is the best way to learn something but sometimes its just about doing a quick POC that can be implemented a lot faster with just being a little good at prompt engineering. So in this age of GenAI, do you use chatbots for generating boilerplates or starting on POCs? PS - Before this I had no knowledge of working with/creating a vscode extension. I had absolutely no idea on how to start.\",\n    \"But it runs on my Docker!!! I recently came across a strange problem where I was trying to setup a cron using crontab. The cron calls a simple python django rest api and sends email to users. All of this was made to run on Docker. The whole application was started, crontab was installed and cron was setup. All in the Dockerfile itself. It was running perfectly fine on my Docker Desktop, on my friends Docker Desktop and also on a hosted standalone VM. But strangely so, the cron was not getting invoked on the Kubernetes pod on which it was supposed to run. It would run if manually invoked but not in intervals. After weeks of trying to solve the problem, I had to shift to Advance Python Scheduler to do the same task from within the python code. Share in the comments if you think you can guess what the problem might be.\",\n    \"Normal People - You can achieve anything if you focus on ONE thing at a time. Meanwhile Software Engineers - 100+ Tabs opened Working on multiple requirements Having Multi screen setup for multiple projects Scrolling Instagram and sending memes while attending a scrum call\",\n    \"10x Faster Typescript COMPILER!!! Still there is an ongoing debate on why Microsoft didn't choose Rust or their own C# for this rewrite. Although, according to the team, Go was a better choice as it provided a similar structure and seamless transition. Had it been a ground-up rewrite and not a migration, Rust or C# would have been a better choice.\",\n    \"I recently started working on a Teams to Signal messenger bot after realizing that so many people outright hate using MS Teams, but since it's an industry standard, they cannot directly ditch it. My current goal is to support forwarding incoming text messages on Teams to a messenger like Signal. The second will be to give support for the reply mechanism from Signal and sync it to Teams. Coming to the technical stuff, I am thinking of using automation tools like Cypress or Playwright to do this. But it all boils down to the availability of public APIs of both messengers. I will try to document my progress here, as I might fail trying, like a lot of other times 😅 Let's see how it pans out. How would you approach this kind of problem?\",\n    \"Do you know about the require cache in Node.js? Lets say you have a js module that you have imported in a js file using require statement. It is highly possible that after a few iterations to your module code, the changes wont reflect even after you have reloaded the api server/modules. This happens because there is a module cache that happens. You need to invalidate it in order for the new changes to reflect. More on this here -\",\n    \"How important is Out-of-Box experience for an open source contributor? Nowadays I have been working on creating a seamless out-of-box experience for the new contributors of Sparrow API Tool. A poor app setup experience or hard-to-understand README file can be a serious dealbreaker for the community. I am emphasizing on the following things to make the setup as smooth as possible: 1) Created and hosted Docker images for various microservices like api-service and auth-service on DockerHub. 2) Created an all-in-one docker-compose file to set up everything from database to queue service in one command. 3) Created a migration script that generates a test user on app start—bypassing auth flow for instant contribution. 4) Documented multiple setup methods (Docker and non-Docker). 5) Pre-filled example .env files with required variables for copy-paste convenience. Let me know if you have suggestions to improve this further—I’m open to feedback!\"\n  ]\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        80
+      ],
+      "id": "4a30b146-4d4a-4951-a4be-c0e10f83ad80",
+      "name": "Add Writing Examples"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "GPT-5-CHAT-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Role: You are my expert LinkedIn content assistant. Your primary goal is to rewrite and rephrase existing content so that it captures the core message and insights of the original but is expressed in my unique brand voice, tone, and style.\n\nContext: I will provide you with 1) an existing article I want to turn into a LinkedIn post, and 2) examples of my past writing. Analyze my writing style from the examples—including my sentence structure, common phrases, level of formality, and use of emojis—and apply that style to the new post.\n\nCritical Rules & Formatting:\n\nDO NOT create a word-for-word copy. Paraphrase the ideas completely in your own words, informed by my style.\n\nWord Limit: The final post must not exceed 200 words.\n\nFormatting: Do not use markdown, bold, italics, or bullet points. Use only plain text.\n\nStructure: Use line breaks for clear spacing. When listing points, start each line with a relevant emoji (e.g., →, , , ).\n\nRequired Elements:\n\nAn engaging hook or question.\n\nA first-person perspective (\"I\", \"my\").\n\nClear insights or key points.\n\nA call-to-action (CTA) or question for the audience.\n\n4-5 relevant, trending hashtags.\n\nResponse Format: You must always respond with a valid JSON object, using the following structure:\n\n{\n  \"content\": \"The fully formatted LinkedIn post, written in my style and adhering to all the rules above.\",\n  \"prompt\": \"<AI image generation prompt – relevant, visual, descriptive>\"\n}",
+              "role": "system"
+            },
+            {
+              "content": "=Examples of my past writings. Use them to align the new post with my brand voice, tone, and style,\n\n{{ $json.posts.join(\"\\n\\n\") }}",
+              "role": "system"
+            },
+            {
+              "content": "=Rewrite this article for LinkedIn that adheres to my brand's voice, writing style, and tone. \nContent: {{ $('Get Article Image').first().json.article.description }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        448,
+        80
+      ],
+      "id": "fe606fc2-7818-4fec-abe1-26777310b01b",
+      "name": "Generate Post Content",
+      "credentials": {
+        "openAiApi": {
+          "id": "5Kzt6hGSZ1JHZqWN",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    .replace(/,+/g, ',')\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\nconst input = $input.first();\nif (typeof input.json.message === 'object' && input.json.message.content && input.json.message.content.content) {\n  input.json.message.content = replaceDashesWithCommas(input.json.message.content.content);\n}\n\nreturn [{ json: { content: input.json.message.content } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        80
+      ],
+      "id": "b0d3c7a5-7baa-46ea-a035-d29a6abc4e79",
+      "name": "Remove EM Dashes"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Parse Command\"].json.chatId }}",
+        "text": "=LinkedIn Draft Preview\n\nPost Body (draft):\n{{ $json.postText.replace(/[\\\\`*_{}[\\]()<>#+=!|~:]/g, '').replace(/\\s{2,}/g, ' ').trim() }}\n\nSource article:\n{{ $json.link }}\n\nReply \"yes\" or \"post\" to publish this on LinkedIn.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1248,
+        80
+      ],
+      "id": "3bd64741-3dd4-4cc8-8077-22bea67ac18d",
+      "name": "Send Draft Preview",
+      "webhookId": "33333333-3333-3333-3333-333333333333",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = $getWorkflowStaticData('global');\nconst draft = staticData.lastDraft;\n\nif (!draft) {\n  return [{ json: { error: 'No draft available. Send an article URL first.' } }];\n}\n\nreturn [{ json: draft }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        272
+      ],
+      "id": "b760a32e-43bb-404a-a059-747fc29c192d",
+      "name": "Load Last Draft"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Parse Command\"].json.chatId }}",
+        "text": "=LinkedIn Post Sent Successfully\n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        272
+      ],
+      "id": "2b11a0ab-e105-45b8-a0ef-db8747615bcc",
+      "name": "Send Confirmation",
+      "webhookId": "44444444-4444-4444-4444-444444444444",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Load Last Draft').first().json.postText }} #LearnWithNayan\n\nRead Complete Blog: {{ $('Load Last Draft').first().json.link }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "0d1f72c1-d550-47b6-973d-d68cadc14c8b",
+      "name": "Create Linkedin Post1",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        224,
+        272
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let html = $input.first().json.data;\n\n\nconst staticData = $getWorkflowStaticData('global');\n\nconst lastArticles = staticData.lastArticles;\n\nconst article = lastArticles.find((a)=> a.link === $(\"Parse Command\").first().json.text)\n\n\nif (!html) {\n  return [{ json: { image: '', article } }];\n}\n\n// remove scripts, styles, comments\nhtml = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<!--[\\s\\S]*?-->/g, '');\n\n// 1️⃣ Try OG Image\nlet og = html.match(/<meta[^>]+property=[\"']og:image[\"'][^>]+content=[\"']([^\"']+)[\"']/i);\nif (og && og[1]) {\n  return [{ json: { image: og[1], article } }];\n}\n\n// 2️⃣ Try Twitter Image\nlet tw = html.match(/<meta[^>]+name=[\"']twitter:image[\"'][^>]+content=[\"']([^\"']+)[\"']/i);\nif (tw && tw[1]) {\n  return [{ json: { image: tw[1], article } }];\n}\n\n// 3️⃣ Try first <img>\nlet img = html.match(/<img[^>]+src=[\"']([^\"']+)[\"']/i);\nif (img && img[1]) {\n  return [{ json: { image: img[1], article } }];\n}\n\n\n// 4️⃣ Nothing found\nreturn [{ json: { image: '', article} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        80
+      ],
+      "id": "8f8b63ae-9dd3-45db-bbb6-a2a706edc5c8",
+      "name": "Get Article Image"
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = $getWorkflowStaticData('global');\n\nconst articleUrl = $('Switch Mode').first().json.text;\nconst image = $(\"Get Article Image\").first().json.image;\nconst imagePrompt = $('Generate Post Content').first().json.message.content.prompt || '';\nconst postText = $(\"Remove EM Dashes\").first().json.content;\n\nstaticData.lastDraft = {\n  link: articleUrl,\n  image,\n  imagePrompt,\n  postText\n};\n\nreturn [{ json: staticData.lastDraft }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        80
+      ],
+      "id": "4dcd6ab6-92d3-4a7e-92d8-a406db8e8ec8",
+      "name": "Store Draft"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Load Last Draft').first().json.image }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Upgrade-Insecure-Requests",
+              "value": "1"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "sec-ch-ua",
+              "value": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\""
+            },
+            {
+              "name": "sec-ch-ua-mobile",
+              "value": "?0"
+            },
+            {
+              "name": "sec-ch-ua-platform",
+              "value": "\"macOS\""
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c68184f-97c3-4b36-969e-fa233decf013",
+      "name": "Download Post Image1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        0,
+        272
+      ],
+      "typeVersion": 4.2
+    }
+  ],
+  "connections": {
+    "Message Received": {
+      "main": [
+        [
+          {
+            "node": "Parse Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Command": {
+      "main": [
+        [
+          {
+            "node": "Switch Mode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Mode": {
+      "main": [
+        [
+          {
+            "node": "Set RSS Sources",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set RSS Sources",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Article HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Load Last Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set RSS Sources": {
+      "main": [
+        [
+          {
+            "node": "Fan Out RSS Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fan Out RSS Sources": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Read": {
+      "main": [
+        [
+          {
+            "node": "Collect Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Articles": {
+      "main": [
+        [
+          {
+            "node": "Send Article List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Article HTML": {
+      "main": [
+        [
+          {
+            "node": "Get Article Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Writing Examples": {
+      "main": [
+        [
+          {
+            "node": "Generate Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post Content": {
+      "main": [
+        [
+          {
+            "node": "Remove EM Dashes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove EM Dashes": {
+      "main": [
+        [
+          {
+            "node": "Store Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Last Draft": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Linkedin Post1": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Article Image": {
+      "main": [
+        [
+          {
+            "node": "Add Writing Examples",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Draft": {
+      "main": [
+        [
+          {
+            "node": "Send Draft Preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Post Image1": {
+      "main": [
+        [
+          {
+            "node": "Create Linkedin Post1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8443f10082278c46aa5cf3acf8ff0f70061a2c58bce76efac814b16290845177"
+  }
+}
