@@ -1,0 +1,368 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1136,
+        352
+      ],
+      "id": "27673cb7-6898-4eca-a24c-89e58508d07c",
+      "name": "Message Received",
+      "webhookId": "17d504a4-d0ce-47f5-95e1-dbc19cd3c3ce",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.message.text.trim() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -912,
+        352
+      ],
+      "id": "8990e1e1-dc08-44b0-a33b-3afe58644c52",
+      "name": "Get Linkedin Article"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "content",
+              "cssSelector": "meta[name='description']",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "image",
+              "cssSelector": "ul.feed-images-content img[data-delayed-url]",
+              "returnValue": "attribute",
+              "attribute": "data-delayed-url"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        352
+      ],
+      "id": "61097ac9-aaeb-4fee-ae01-7fcaf83e619e",
+      "name": "Extract HTML Content"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-chat-latest",
+          "mode": "list",
+          "cachedResultName": "GPT-5-CHAT-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=**Role:** You are a seasoned staff software engineer and content expert. Your goal is to generate authentic, engaging, and valuable comments that a real person would write on a LinkedIn post.\n\n**Objective:** Analyze the provided LinkedIn post data and generate 3 distinct comment options. The comments must not sound like generic AI spam; they should be insightful, conversational, and add value to the discussion.\n\n**Instructions for Generating Comments:**\n\n1.  **Tone & Style:** Write in a professional yet conversational tone. Use emojis sparingly (max 1-2 per comment) to seem human. Avoid overly formal language.\n2.  **Value Addition:** Do not just agree or praise. Add a new perspective, share a relevant personal experience, ask a thoughtful question, or provide a useful piece of information.\n3.  **Structure:**\n    *   **Option 1 (Additive Insight):** Add a new point or nuance that the original post didn't cover.\n    *   **Option 2 (Personal Experience):** Relate the topic to a brief, relevant personal story or case study. Use \"I\" statements.\n    *   **Option 3 (Question for Discussion):** Pose a thoughtful question that sparks further conversation among other readers.\n    *   **Option 4 (A witty, funny but techy comment):** Share a clever, humorous insight that also demonstrates technical knowledge and encourages engagement or discussion from the community.\n4.  **Length:** Keep each comment between 1-4 sentences. It should be substantial but easily readable.\n5.  **Authenticity Triggers:** Use phrases that sound human:\n    *   \"Great post. I've found that...\"\n    *   \"This is so important. In my role at [Industry], we see...\"\n    *   \"Absolutely. One thing I'd add is...\"\n    *   \"Thanks for sharing this. It reminds me of when...\"\n    *   \"Interesting perspective! How would you apply this to [specific scenario]?\"\n\n**Output Format:** Please provide your output exactly as follows:\n\n**comment_options:**\n\n1.  **additive_insight:** [Your generated comment here]\n2.  **personal_experience:** [Your generated comment here]\n3.  **question_for_discussion:** [Your generated comment here]\n4.  **witty_funny_comment:** [Your generated comment here]",
+              "role": "system"
+            },
+            {
+              "content": "=**Post Data to Analyze:**\n{{ $('Extract HTML Content').item.json.content }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -240,
+        352
+      ],
+      "id": "5c6e58d6-e96f-4c57-8216-da82c0bf4832",
+      "name": "Generate Post Content",
+      "credentials": {
+        "openAiApi": {
+          "id": "5Kzt6hGSZ1JHZqWN",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    // turn hyphen/en dash/em dash/horizontal bar into commas\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    // collapse multiple commas\n    .replace(/,+/g, ',')\n    // normalize spaces around commas (preserve newlines)\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    // remove leading/trailing spaces/tabs only (keep any \\n)\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    // drop a leading or trailing comma (with optional spaces/tabs)\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\nfor(const [key, value] of Object.entries($input.first().json.message.content.comment_options)){\n\n  $input.first().json.message.content.comment_options[key] = replaceDashesWithCommas(value);\n}\n\n// Function to escape all special characters for Telegram MarkdownV2\nfunction escapeMarkdownV2(text) {\n  const escapeChars = '_*[]()~`>#+-=|{}.!';\n  return text.replace(new RegExp(`[${escapeChars.replace(/./g, '\\\\$&')}]`, 'g'), '\\\\$&');\n}\n\n// First, URL encode the URL to handle &, %, etc.\nconst encodedUrl = encodeURI($('Message Received').first().json.message.text);\n// Then, escape MarkdownV2 special characters in the already-encoded URL\nconst safePostUrl = escapeMarkdownV2(encodedUrl);\n\nreturn {\n  comments: $input.first().json.message.content.comment_options,\n  url: safePostUrl\n}\n// $input.first().json.message.content =\n//   replaceDashesWithCommas($input.first().json.message.content.content);\n\n// return {content: $input.first().json.message.content}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        272
+      ],
+      "id": "51048dac-d975-42c0-bf8c-1d9a38fa944b",
+      "name": "Remove EM Dashes"
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractThreadUrnFromLinkedInUrl(url) {\n  // Match the activity ID from the URL pattern\n  const activityIdMatch = url.match(/activity-(\\d+)/);\n  \n  if (activityIdMatch && activityIdMatch[1]) {\n    return `urn:li:activity:${activityIdMatch[1]}`;\n  }\n  \n  // Alternative pattern for some LinkedIn URL formats\n  const updatePatternMatch = url.match(/\\/update\\/urn:li:activity:(\\d+)/);\n  if (updatePatternMatch && updatePatternMatch[1]) {\n    return `urn:li:activity:${updatePatternMatch[1]}`;\n  }\n  \n  // Fallback: try to find the numeric ID after the last underscore\n  const parts = url.split('_');\n  if (parts.length > 1) {\n    const lastPart = parts[parts.length - 1];\n    const numericMatch = lastPart.match(/(\\d+)/);\n    if (numericMatch && numericMatch[1]) {\n      return `urn:li:activity:${numericMatch[1]}`;\n    }\n  }\n  \n  throw new Error('Could not extract threadUrn from the provided LinkedIn URL');\n}\n\n  const threadUrn = extractThreadUrnFromLinkedInUrl($('Message Received').first().json.message.text);\nreturn {threadUrn}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        352
+      ],
+      "id": "1b555a42-f03b-4761-8dfd-6dac25ad5c43",
+      "name": "Extract Linkedin Post URN"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "limitWaitTime": true,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        608,
+        272
+      ],
+      "id": "dbc034b7-958d-463d-88ca-7c531f7d2a07",
+      "name": "Wait For Approval1",
+      "webhookId": "29553916-9873-47ce-ad51-3205eab7d92a"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=<b>Select a comment for this Post:</b>\n\n<a href=\"{{ $('Message Received').item.json.message.link_preview_options.url }}\">Click here to open the post</a>\n\n<b>Additive Comment (draft):</b>\n<code>{{ $json.comments.additive_insight }}</code>\n\n<b>Personal Experience (draft):</b>\n<code>{{ $json.comments.personal_experience }}</code>\n\n<b>Question (draft):</b>\n<code>{{ $json.comments.question_for_discussion }}</code>\n\n<b>Funny (draft):</b>\n<code>{{ $json.comments.witty_funny_comment }}</code>",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Regenerate",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=regenerate"
+                    }
+                  },
+                  {
+                    "text": "Exit",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=exit"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "693fcf31-ec0d-488a-b218-5091472047e4",
+      "name": "Send Generated Comments",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        384,
+        272
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "6ac0ceb8-7dc4-4be5-9db7-1efb54bcfea7",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9ecd481b-5893-4179-b88a-12d59e1671b5",
+              "leftValue": "={{ $json.query.action }}",
+              "rightValue": "regenerate",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        352
+      ],
+      "id": "1d343635-88e4-49e7-ac70-8931ed3ba27a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Comment Flow Exit",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "d440ec38-b2d0-4adb-adb9-ed0b82703e21",
+      "name": "Send Exit Flow Message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1056,
+        352
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "e9987248-092d-401c-82eb-248b2d57b1e6",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Message Received": {
+      "main": [
+        [
+          {
+            "node": "Get Linkedin Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Linkedin Article": {
+      "main": [
+        [
+          {
+            "node": "Extract HTML Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract HTML Content": {
+      "main": [
+        [
+          {
+            "node": "Extract Linkedin Post URN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post Content": {
+      "main": [
+        [
+          {
+            "node": "Remove EM Dashes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove EM Dashes": {
+      "main": [
+        [
+          {
+            "node": "Send Generated Comments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Linkedin Post URN": {
+      "main": [
+        [
+          {
+            "node": "Generate Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For Approval1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Generated Comments": {
+      "main": [
+        [
+          {
+            "node": "Wait For Approval1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Generate Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Exit Flow Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "8443f10082278c46aa5cf3acf8ff0f70061a2c58bce76efac814b16290845177"
+  }
+}
