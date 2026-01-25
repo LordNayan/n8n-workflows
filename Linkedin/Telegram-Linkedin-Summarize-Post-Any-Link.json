@@ -27,14 +27,14 @@
       "parameters": {
         "modelId": {
           "__rl": true,
-          "value": "gpt-5.2",
+          "value": "chatgpt-4o-latest",
           "mode": "list",
-          "cachedResultName": "GPT-5.2"
+          "cachedResultName": "CHATGPT-4O-LATEST"
         },
         "messages": {
           "values": [
             {
-              "content": "Role: You are a senior staff engineer and technical writer. Your primary goal is to Summarize the provided blog article into a high-signal LinkedIn post such that it captures the core message and insights but is expressed in my unique brand voice, tone, and style.\n\nContext: I will provide you with 1) a HTTP url of the blog post that needs to be summarised, and 2) examples of my past writing. Analyze my writing style from the examples—including my sentence structure, common phrases, level of formality, and use of emojis—and apply that style to the new post.\n\nCritical Rules & Formatting:\n\nDO NOT create a word-for-word copy. Paraphrase the ideas completely in your own words, informed by my style.\n\nWord Limit: The final post must be approx 200-250 words.\n\nFormatting: Do not use markdown, bold, italics, or bullet points. Use only plain text.\n\nStructure: Use line breaks for clear spacing. When listing points, start each line with a relevant emoji (e.g., →, , , ).\n\nRequired Elements:\n\nAn engaging hook or question.\n\nA first-person perspective (\"I\", \"my\").\n\nClear insights or key points.\n\nA call-to-action (CTA) or question for the audience.\n\n4-5 relevant, trending hashtags.\n\nResponse Format: You must always respond with a valid JSON object, using the following structure:\n\nImage Prompt Rules:\nSuggest an AI image prompt related to the post. Based on the post context, it can be:\n- App interface or UX concept\n- Visual metaphor (e.g. “scaling servers as rocket engines”)\n- Stack or architecture illustration\n- Abstract concept visuals (e.g. speed, chaos, control, balance)\n- Tech-product mockups or feature highlights\n- Create Flowcharts only when explaining a process, framework, or system\n\n{\n  \"content\": \"The fully formatted LinkedIn post, written in my style and adhering to all the rules above.\",\n\"prompt\": \"<AI image generation prompt – relevant, visual, descriptive>\"\n}",
+              "content": "Role: You are a senior staff engineer and technical writer. Your primary goal is to Summarize the provided blog article into a high-signal LinkedIn post such that it captures the core message and insights but is expressed in my unique brand voice, tone, and style.\n\nContext: I will provide you with \n1) A HTTP url of the blog post that needs to be summarised\n2) Examples of my past writing. \nAnalyze my writing style from the examples—including my sentence structure, common phrases, level of formality, and use of emojis—and apply that style to the new post.\n\nCritical Rules & Formatting:\n\nDO NOT create a word-for-word copy. Paraphrase the ideas completely in your own words, informed by my style.\n\nWord Limit: The final post must be approx 200-250 words.\n\nFormatting: Do not use markdown, bold, italics, or bullet points. Use only plain text.\n\nStructure: Use line breaks for clear spacing. When listing points, start each line with a relevant emoji (e.g., →, , , ).\n\nTool or Technology Focus: If the blog post focuses on a specific tool or technology, ensure that it is prominently featured in the post.\n\nRequired Elements:\n\nAn engaging hook or question.\n\nA first-person perspective (\"I\", \"my\").\n\nClear insights or key points.\n\nA call-to-action (CTA) or question for the audience.\n\n4-5 relevant, trending hashtags.\n\nResponse Format: You must always respond with a valid JSON object, using the following structure:\n\nImage Prompt Rules:\nSuggest an AI image prompt related to the post. Based on the post context, it can be:\n- App interface or UX concept\n- Visual metaphor (e.g. “scaling servers as rocket engines”)\n- Stack or architecture illustration\n- Abstract concept visuals (e.g. speed, chaos, control, balance)\n- Tech-product mockups or feature highlights\n- Create Flowcharts only when explaining a process, framework, or system\n\n{\n  \"content\": \"The fully formatted LinkedIn post, written in my style and adhering to all the rules above.\",\n  \"prompt\": \"<AI image generation prompt – relevant, visual, descriptive>\",\n  \"google_image_search\": \"<3-5 descriptive keywords for searching a relevant image on Google Images>\"\n}",
               "role": "system"
             },
             {
@@ -61,123 +61,6 @@
         "openAiApi": {
           "id": "5Kzt6hGSZ1JHZqWN",
           "name": "OpenAi account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resume": "webhook",
-        "limitWaitTime": true,
-        "resumeUnit": "minutes",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1,
-      "position": [
-        -3312,
-        544
-      ],
-      "id": "f158287b-890b-4847-ab0f-66e7cf8ef99f",
-      "name": "Wait For Approval",
-      "webhookId": "29553916-9873-47ce-ad51-3205eab7d92a"
-    },
-    {
-      "parameters": {
-        "chatId": "7281360444",
-        "text": "=LinkedIn Preview — Needs Approval\n\nPost Body (draft):\n{{ $json.content.replace(/[\\\\`*_{}[\\]()<>#+=!|~:.-]/g, '').replace(/\\s{2,}/g, ' ').trim() }}\nApprove or reject below.",
-        "replyMarkup": "inlineKeyboard",
-        "inlineKeyboard": {
-          "rows": [
-            {
-              "row": {
-                "buttons": [
-                  {
-                    "text": "Approve",
-                    "additionalFields": {
-                      "url": "={{$execution.resumeUrl}}?action=approve"
-                    }
-                  },
-                  {
-                    "text": "Reject",
-                    "additionalFields": {
-                      "url": "={{$execution.resumeUrl}}?action=reject"
-                    }
-                  },
-                  {
-                    "text": "Generate Image",
-                    "additionalFields": {
-                      "url": "={{$execution.resumeUrl}}?action=image"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "additionalFields": {}
-      },
-      "id": "39f84ddb-5f42-48ed-bea9-5a86c37e08c9",
-      "name": "Send Approval Request",
-      "type": "n8n-nodes-base.telegram",
-      "position": [
-        -3536,
-        544
-      ],
-      "typeVersion": 1.2,
-      "webhookId": "6ac0ceb8-7dc4-4be5-9db7-1efb54bcfea7",
-      "credentials": {
-        "telegramApi": {
-          "id": "Nmc40qtYPAX3b447",
-          "name": "Linkedin Comment Bot"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "person": "SKNqCfgpq4",
-        "text": "={{ $('Remove EM Dashes1').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
-        "shareMediaCategory": "IMAGE",
-        "additionalFields": {
-          "visibility": "PUBLIC"
-        }
-      },
-      "id": "78a2007a-70ae-4bb0-9e06-767750ad051d",
-      "name": "Create Linkedin Post",
-      "type": "n8n-nodes-base.linkedIn",
-      "position": [
-        -2416,
-        208
-      ],
-      "typeVersion": 1,
-      "credentials": {
-        "linkedInOAuth2Api": {
-          "id": "erF5vcdyH1ift5HA",
-          "name": "Nayan's Linkedin Account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "7281360444",
-        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
-        "replyMarkup": "inlineKeyboard",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "id": "c3f0774b-ee81-4475-907b-96a9222a263c",
-      "name": "Send Post Created Message",
-      "type": "n8n-nodes-base.telegram",
-      "position": [
-        -2192,
-        304
-      ],
-      "webhookId": "020b8162-d8df-4dd4-9e41-e7d1715fcf00",
-      "typeVersion": 1.2,
-      "credentials": {
-        "telegramApi": {
-          "id": "Nmc40qtYPAX3b447",
-          "name": "Linkedin Comment Bot"
         }
       }
     },
@@ -230,13 +113,13 @@
       "parameters": {
         "resource": "image",
         "model": "gpt-image-1",
-        "prompt": "={{ $('Merge Code').item.json.headers.host }}",
+        "prompt": "={{ $('Process Json Output').item.json.imagePrompt }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -2416,
+        -2864,
         768
       ],
       "id": "055307f3-ea90-4f53-a3f9-c0faf30ec05a",
@@ -245,6 +128,764 @@
         "openAiApi": {
           "id": "5Kzt6hGSZ1JHZqWN",
           "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55fa80de-9fcb-42e6-a63e-7bb7d0686999"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fb972cfa-b778-4326-b04f-ced9bf147fd9",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "15c3ffb3-2e94-4479-b1c7-6679337cc2ca",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "46e41a49-72d9-48fa-8d4d-b7f3d2b42133",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "image_search",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -3088,
+        656
+      ],
+      "id": "25094e9d-8fa1-4da1-ae22-fe0bdeb908b1",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('Generate Post Image').first()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1744,
+        816
+      ],
+      "id": "789ccb4b-4730-4059-9c65-25ddedd3d3ee",
+      "name": "Extract Generated Image"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55fa80de-9fcb-42e6-a63e-7bb7d0686999"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fb972cfa-b778-4326-b04f-ced9bf147fd9",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "15c3ffb3-2e94-4479-b1c7-6679337cc2ca",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1968,
+        752
+      ],
+      "id": "4e198cb6-dcc5-4d78-a6ba-3b69c3f1f435",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Copy Article Flow Exit",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "77b2a05d-64da-4061-8f35-964a406a08b8",
+      "name": "Send Exit Flow Message1",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1744,
+        592
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "e9987248-092d-401c-82eb-248b2d57b1e6",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"posts\": [\n    \"CORS doesn't apply to Websockets. Wait! What? While building WebSocket and Socket.IO support for the web version of Sparrow API Tool, I learned something interesting: CORS doesn’t apply to WebSockets. Since WebSockets operate on their own protocol (ws:// or wss://) after the initial HTTP handshake, they aren’t restricted by CORS like HTTP requests. So, while an HTTP request might get blocked if sent directly from a browser instead of being routed through a proxy server, the same issue won't occur with a raw WebSocket connection. However, if you need to send custom headers with your WebSocket requests, a backend proxy server might still be necessary. On the other hand, Socket.IO has its own server-side CORS configuration, letting you control which origins can connect. Always something new to learn when building tools like Sparrow! We also have a giveaway active on our Instagram channel for some cool Sparrow Merchandise. Check out the pinned comment for more details.\",\n    \"ChatGPT or Stackoverflow? Recently I was able to build a completely functional vscode extension with the help of GPT-4o. I was able to complete this in a days time which would have taken multiple days if I relied solely on reading docs and searching Stackoverflow/Google. I think reading official docs is the best way to learn something but sometimes its just about doing a quick POC that can be implemented a lot faster with just being a little good at prompt engineering. So in this age of GenAI, do you use chatbots for generating boilerplates or starting on POCs? PS - Before this I had no knowledge of working with/creating a vscode extension. I had absolutely no idea on how to start.\",\n    \"But it runs on my Docker!!! I recently came across a strange problem where I was trying to setup a cron using crontab. The cron calls a simple python django rest api and sends email to users. All of this was made to run on Docker. The whole application was started, crontab was installed and cron was setup. All in the Dockerfile itself. It was running perfectly fine on my Docker Desktop, on my friends Docker Desktop and also on a hosted standalone VM. But strangely so, the cron was not getting invoked on the Kubernetes pod on which it was supposed to run. It would run if manually invoked but not in intervals. After weeks of trying to solve the problem, I had to shift to Advance Python Scheduler to do the same task from within the python code. Share in the comments if you think you can guess what the problem might be.\",\n  \"Normal People - You can achieve anything if you focus on ONE thing at a time. Meanwhile Software Engineers - 100+ Tabs opened Working on multiple requirements Having Multi screen setup for multiple projects Scrolling Instagram and sending memes while attending a scrum call\",\n  \"10x Faster Typescript COMPILER!!! Still there is an ongoing debate on why Microsoft didn't choose Rust or their own C# for this rewrite. Although, according to the team, Go was a better choice as it provided a similar structure and seamless transition. Had it been a ground-up rewrite and not a migration, Rust or C# would have been a better choice.\",\n  \"I recently started working on a Teams to Signal messenger bot after realizing that so many people outright hate using MS Teams, but since it's an industry standard, they cannot directly ditch it. My current goal is to support forwarding incoming text messages on Teams to a messenger like Signal. The second will be to give support for the reply mechanism from Signal and sync it to Teams. Coming to the technical stuff, I am thinking of using automation tools like Cypress or Playwright to do this. But it all boils down to the availability of public APIs of both messengers. I will try to document my progress here, as I might fail trying, like a lot of other times 😅 Let's see how it pans out. How would you approach this kind of problem?\",\n    \"Do you know about the require cache in Node.js? Lets say you have a js module that you have imported in a js file using require statement. It is highly possible that after a few iterations to your module code, the changes wont reflect even after you have reloaded the api server/modules. This happens because there is a module cache that happens. You need to invalidate it in order for the new changes to reflect. More on this here -\",\n    \"How important is Out-of-Box experience for an open source contributor? Nowadays I have been working on creating a seamless out-of-box experience for the new contributors of Sparrow API Tool. A poor app setup experience or hard-to-understand README file can be a serious dealbreaker for the community. I am emphasizing on the following things to make the setup as smooth as possible: 1) Created and hosted Docker images for various microservices like api-service and auth-service on DockerHub. 2) Created an all-in-one docker-compose file to set up everything from database to queue service in one command. 3) Created a migration script that generates a test user on app start—bypassing auth flow for instant contribution. 4) Documented multiple setup methods (Docker and non-Docker). 5) Pre-filled example .env files with required variables for copy-paste convenience. Let me know if you have suggestions to improve this further—I’m open to feedback!\"\n]\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4336,
+        688
+      ],
+      "id": "f325d8c9-f15e-4ed6-8938-0da154bcb6a0",
+      "name": "Add Writing Examples",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.message.text }}",
+        "options": {
+          "batching": {
+            "batch": {}
+          },
+          "allowUnauthorizedCerts": true,
+          "lowercaseHeaders": true,
+          "redirect": {
+            "redirect": {}
+          },
+          "timeout": 5000
+        }
+      },
+      "id": "03e3bee8-89ae-4cd0-9f25-02b3dd2e5926",
+      "name": "Fetch Blog HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4784,
+        688
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "image",
+              "cssSelector": "meta[property='og:image']",
+              "returnValue": "attribute",
+              "attribute": "content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c4c34e97-49fb-4b5f-a756-a9d730813e29",
+      "name": "Extract HTML Content",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -4560,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2416,
+        1208
+      ],
+      "id": "079839b9-e7e7-4992-a9bc-f240e411fcc0",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    // turn smart/curly quotes into standard straight quotes\n    .replace(/[\\u201C\\u201D]/g, '\"')\n    // turn curly single quotes/apostrophes into standard straight quotes\n    .replace(/[\\u2018\\u2019]/g, \"'\")\n    // turn hyphen/en dash/em dash/horizontal bar into commas\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    // collapse multiple commas\n    .replace(/,+/g, ',')\n    // normalize spaces around commas (preserve newlines)\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    // remove leading/trailing spaces/tabs only (keep any \\n)\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    // drop a leading or trailing comma (with optional spaces/tabs)\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\nconst linkedInPost = JSON.parse($(\"Generate LinkedIn Post\").first().json.message.content)\n\nconst imagePrompt = linkedInPost.prompt\n\nconst formattedContent =\n  replaceDashesWithCommas(linkedInPost.content);\n\nreturn {content: formattedContent, imagePrompt}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3760,
+        688
+      ],
+      "id": "789a668c-fa28-443e-87df-0c9df8d346d2",
+      "name": "Process Json Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "function getFirst10Images(imageObjArray) {\n    // Common image extensions to check for\n    const imageExtensions = [\n        '.jpg', '.jpeg', '.png', '.gif', '.bmp', \n        '.webp', '.svg', '.tiff', '.tif', '.ico',\n        '.jfif', '.pjpeg', '.pjp', '.avif', '.apng'\n    ];\n    \n    // Make extensions case-insensitive by converting to lowercase\n    const normalizedExtensions = imageExtensions.map(ext => ext.toLowerCase());\n    \n    // Filter and get first 10 images with valid extensions\n    const result = [];\n    \n    for (const obj of imageObjArray) {\n        // Check if object has original property and it's a string\n        if (obj && typeof obj.original === 'string') {\n            const url = obj.original.toLowerCase();\n            \n            // Check if URL ends with any of the image extensions\n            const hasImageExtension = normalizedExtensions.some(ext => \n                url.endsWith(ext)\n            );\n            \n            // Also check for extensions with query parameters\n            const hasImageExtensionWithParams = normalizedExtensions.some(ext => {\n                const urlWithoutQuery = url.split('?')[0];\n                return urlWithoutQuery.endsWith(ext);\n            });\n            \n            if (hasImageExtension || hasImageExtensionWithParams) {\n                result.push({...obj}); // Create a shallow copy of the object\n                \n                // Stop when we have 10 images\n                if (result.length === 10) {\n                    break;\n                }\n            }\n        }\n    }\n    \n    return result;\n}\n\n\n\nreturn getFirst10Images($(\"Fetch Google Images\").first().json.images_results)"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2640,
+        1208
+      ],
+      "id": "7ba3ba67-3adb-440b-95cb-935d402a8885",
+      "name": "Get Google Image links"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "7281360444",
+        "binaryData": true,
+        "additionalFields": {
+          "caption": "=Write {{ $json.position }} to select this image."
+        }
+      },
+      "id": "6e848b4e-2ee7-48f0-a82c-3d70da544bc2",
+      "name": "Send Google Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1968,
+        1280
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_images"
+            },
+            {
+              "name": "q",
+              "value": "={{ JSON.parse($('Generate LinkedIn Post').item.json.message.content).google_image_search }}"
+            },
+            {
+              "name": "num",
+              "value": "5"
+            },
+            {
+              "name": "api_key",
+              "value": "a8bd5b65c9e6f63be256c3e6672295c5fefb5970bebc6d2984be430b9116199f"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2864,
+        1208
+      ],
+      "id": "5f90c7a3-a80f-4775-9719-4eeb3972bdf5",
+      "name": "Fetch Google Images"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "7281360444",
+        "message": "=Type a number to select the image?",
+        "responseType": "freeText",
+        "options": {}
+      },
+      "id": "839d5459-420a-4a96-ab5d-cddcba19551e",
+      "name": "Send Choose Image Form",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -2192,
+        1016
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const imageLinksArray = $('Get Google Image links').all()\nconst position = $input.first().json.data.text\nconst image = imageLinksArray.find((item)=> item.json.position == position)\nreturn {\n  original: image?.json.original\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1968,
+        1016
+      ],
+      "id": "28b09aba-fe06-4e5c-9f6b-beafbf7a3e73",
+      "name": "Extract Chosen Image Link"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.original }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "PostmanRuntime/7.45.0"
+            },
+            {
+              "name": "Accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "820589fc-7a93-40a9-b1b4-cf0913863b86",
+      "name": "Download Selected Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1744,
+        1016
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Process Json Output').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
+        "shareMediaCategory": "IMAGE",
+        "binaryPropertyName": "=data",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "5d137cdb-a795-4441-90f6-4bea4e2ef784",
+      "name": "Create Post with Google Image",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        -1520,
+        1016
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "059bedaf-78d9-4936-9938-3553724ecb4c",
+      "name": "Send Ack - Google Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1296,
+        1016
+      ],
+      "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "3e42ff9f-873f-471e-a2c0-316f9bec1f9e",
+      "name": "Send Ack - AI Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1296,
+        816
+      ],
+      "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c3f0774b-ee81-4475-907b-96a9222a263c",
+      "name": "Send Ack - Blog Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -2192,
+        304
+      ],
+      "webhookId": "020b8162-d8df-4dd4-9e41-e7d1715fcf00",
+      "typeVersion": 1.2,
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7281360444",
+        "text": "=LinkedIn Preview — Needs Approval\n\nPost Body (draft):\n{{ $json.content.replace(/[\\\\`*_{}[\\]()<>#+=!|~:.-]/g, '').replace(/\\s{2,}/g, ' ').trim() }}\nApprove or reject below.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Approve",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=approve"
+                    }
+                  },
+                  {
+                    "text": "Reject",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=reject"
+                    }
+                  },
+                  {
+                    "text": "Generate Image",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=image"
+                    }
+                  },
+                  {
+                    "text": "Image Search",
+                    "additionalFields": {
+                      "url": "={{$execution.resumeUrl}}?action=image_search"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "id": "39f84ddb-5f42-48ed-bea9-5a86c37e08c9",
+      "name": "Send Content Approval Request",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -3536,
+        688
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "6ac0ceb8-7dc4-4be5-9db7-1efb54bcfea7",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "limitWaitTime": true,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        -3312,
+        688
+      ],
+      "id": "f158287b-890b-4847-ab0f-66e7cf8ef99f",
+      "name": "Wait for Content Approval",
+      "webhookId": "29553916-9873-47ce-ad51-3205eab7d92a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "817922d9-c16b-43ca-9032-fca6f79193d6",
+              "leftValue": "={{ $('Extract HTML Content').first().json.image }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2864,
+        304
+      ],
+      "id": "bf6b8726-4d54-4b3e-9bb8-d9165b264f68",
+      "name": "Blog Image Exists?"
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Process Json Output').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "20053a58-8738-4e40-baf7-31887118d3cb",
+      "name": "Create Post w/o Blog Image",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        -2416,
+        400
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "person": "SKNqCfgpq4",
+        "text": "={{ $('Process Json Output').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "78a2007a-70ae-4bb0-9e06-767750ad051d",
+      "name": "Create Post with Blog Image",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        -2416,
+        208
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "erF5vcdyH1ift5HA",
+          "name": "Nayan's Linkedin Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "7281360444",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "id": "77ccff2e-6f11-4b53-be1d-519279b3f2b7",
+      "name": "Send AI Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -2640,
+        696
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
+      "credentials": {
+        "telegramApi": {
+          "id": "Nmc40qtYPAX3b447",
+          "name": "Linkedin Comment Bot"
         }
       }
     },
@@ -284,11 +925,11 @@
         "additionalFields": {}
       },
       "id": "22290eb1-3ada-4335-ac9e-51cbdd3b0be4",
-      "name": "Send Approval Request1",
+      "name": "Send Approval for AI Image",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        -1968,
-        704
+        -2416,
+        696
       ],
       "typeVersion": 1.2,
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
@@ -301,116 +942,23 @@
     },
     {
       "parameters": {
-        "operation": "sendPhoto",
-        "chatId": "7281360444",
-        "binaryData": true,
-        "additionalFields": {}
-      },
-      "id": "77ccff2e-6f11-4b53-be1d-519279b3f2b7",
-      "name": "Send Post Image1",
-      "type": "n8n-nodes-base.telegram",
-      "position": [
-        -2192,
-        704
-      ],
-      "typeVersion": 1.2,
-      "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
-      "credentials": {
-        "telegramApi": {
-          "id": "Nmc40qtYPAX3b447",
-          "name": "Linkedin Comment Bot"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "approve",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    },
-                    "id": "55fa80de-9fcb-42e6-a63e-7bb7d0686999"
-                  }
-                ],
-                "combinator": "and"
-              }
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "fb972cfa-b778-4326-b04f-ced9bf147fd9",
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "reject",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              }
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "15c3ffb3-2e94-4479-b1c7-6679337cc2ca",
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "image",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              }
-            }
-          ]
-        },
+        "resume": "webhook",
         "options": {}
       },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.2,
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
       "position": [
-        -3088,
-        528
+        -2192,
+        696
       ],
-      "id": "25094e9d-8fa1-4da1-ae22-fe0bdeb908b1",
-      "name": "Switch"
+      "id": "da3ca1b2-b1f0-4ca8-bba8-b9320ee4179e",
+      "name": "Wait For AI Image Approval",
+      "webhookId": "139c56a4-5fdb-47b1-a3d4-15f158675783"
     },
     {
       "parameters": {
         "person": "SKNqCfgpq4",
-        "text": "={{ $('Remove EM Dashes1').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
+        "text": "={{ $('Process Json Output').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
         "shareMediaCategory": "IMAGE",
         "binaryPropertyName": "=data",
         "additionalFields": {
@@ -418,10 +966,10 @@
         }
       },
       "id": "cede57aa-be57-4d0d-900a-32441266cabc",
-      "name": "Create Linkedin Post Again",
+      "name": "Create Post with AI Image",
       "type": "n8n-nodes-base.linkedIn",
       "position": [
-        -1072,
+        -1520,
         816
       ],
       "typeVersion": 1,
@@ -434,53 +982,15 @@
     },
     {
       "parameters": {
-        "chatId": "7281360444",
-        "text": "=LinkedIn Post Sent Successfully - Copy Article \n\nURL - https://www.linkedin.com/feed/update/{{ $json.urn }}\n\nPosted At - {{ DateTime.now() }}",
-        "replyMarkup": "inlineKeyboard",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "id": "3e42ff9f-873f-471e-a2c0-316f9bec1f9e",
-      "name": "Send Post Created Message Again",
-      "type": "n8n-nodes-base.telegram",
-      "position": [
-        -848,
-        816
-      ],
-      "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
-      "typeVersion": 1.2,
-      "credentials": {
-        "telegramApi": {
-          "id": "Nmc40qtYPAX3b447",
-          "name": "Linkedin Comment Bot"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "return $('Generate Post Image').first()"
+        "jsCode": "for (const item of $input.all()) {\n  if(typeof(item.json.message) === 'object'){\n    $input.first().json.headers.host = item.json.message.content.prompt\n    $input.first().json.headers.connection = item.json.message.content.content\n  }\n}\n\nreturn $input.first();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1296,
-        816
+        -4784,
+        1504
       ],
-      "id": "789ccb4b-4730-4059-9c65-25ddedd3d3ee",
-      "name": "Extract Generated Image"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  if(typeof(item.json.message) === 'object'){\n    $input.first().json.headers.host = item.json.message.content.prompt\n    $input.first().json.headers.connection = item.json.message.content.content\n\n  }\n}\n// console.log(Object.keys($input.first().json.message))\nreturn $input.first();"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -2640,
-        768
-      ],
-      "id": "eec0025a-4e16-4e70-98c7-fbc58decae9d",
+      "id": "042dd2fd-c337-4b3f-b5ff-26ae6aab54a9",
       "name": "Merge Code"
     },
     {
@@ -488,261 +998,57 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -2864,
-        768
+        -5008,
+        1504
       ],
-      "id": "c0308d4f-b807-4209-a6a0-c310c257099e",
+      "id": "94f47c56-6510-477f-821a-1999517aebb5",
       "name": "Merge Responses"
     },
     {
       "parameters": {
-        "rules": {
-          "values": [
+        "url": "={{ $json.original }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
             {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "approve",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    },
-                    "id": "55fa80de-9fcb-42e6-a63e-7bb7d0686999"
-                  }
-                ],
-                "combinator": "and"
-              }
+              "name": "User-Agent",
+              "value": "PostmanRuntime/7.45.0"
             },
             {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "fb972cfa-b778-4326-b04f-ced9bf147fd9",
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "reject",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              }
+              "name": "Accept",
+              "value": "*/*"
             },
             {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "15c3ffb3-2e94-4479-b1c7-6679337cc2ca",
-                    "leftValue": "={{ $json.query.action }}",
-                    "rightValue": "image",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              }
+              "name": "Cache-Control",
+              "value": "no-cache"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
             }
           ]
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.2,
-      "position": [
-        -1520,
-        752
-      ],
-      "id": "4e198cb6-dcc5-4d78-a6ba-3b69c3f1f435",
-      "name": "Switch1"
-    },
-    {
-      "parameters": {
-        "person": "SKNqCfgpq4",
-        "text": "={{ $('Remove EM Dashes1').item.json.content }} #LearnWithNayan\n\nLearn More: {{ $('Telegram URL Input').item.json.message.text }}",
-        "additionalFields": {
-          "visibility": "PUBLIC"
-        }
-      },
-      "id": "20053a58-8738-4e40-baf7-31887118d3cb",
-      "name": "Create Linkedin Post1",
-      "type": "n8n-nodes-base.linkedIn",
-      "position": [
-        -2416,
-        400
-      ],
-      "typeVersion": 1,
-      "credentials": {
-        "linkedInOAuth2Api": {
-          "id": "erF5vcdyH1ift5HA",
-          "name": "Nayan's Linkedin Account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "7281360444",
-        "text": "=LinkedIn Copy Article Flow Exit",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "id": "77b2a05d-64da-4061-8f35-964a406a08b8",
-      "name": "Send Exit Flow Message1",
-      "type": "n8n-nodes-base.telegram",
-      "position": [
-        -1296,
-        592
-      ],
-      "typeVersion": 1.2,
-      "webhookId": "e9987248-092d-401c-82eb-248b2d57b1e6",
-      "credentials": {
-        "telegramApi": {
-          "id": "Nmc40qtYPAX3b447",
-          "name": "Linkedin Comment Bot"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "function replaceDashesWithCommas(str) {\n  return str\n    // turn smart/curly quotes into standard straight quotes\n    .replace(/[\\u201C\\u201D]/g, '\"')\n    // turn curly single quotes/apostrophes into standard straight quotes\n    .replace(/[\\u2018\\u2019]/g, \"'\")\n    // turn hyphen/en dash/em dash/horizontal bar into commas\n    .replace(/[\\u2012\\u2013\\u2014\\u2015]/g, ',')\n    // collapse multiple commas\n    .replace(/,+/g, ',')\n    // normalize spaces around commas (preserve newlines)\n    .replace(/[ \\t]*,[ \\t]*/g, ', ')\n    // remove leading/trailing spaces/tabs only (keep any \\n)\n    .replace(/^[ \\t]+|[ \\t]+$/g, '')\n    // drop a leading or trailing comma (with optional spaces/tabs)\n    .replace(/^[ \\t]*,|,[ \\t]*$/g, '');\n}\n\n$input.first().json.message.content =\n  replaceDashesWithCommas(JSON.parse($input.first().json.message.content).content);\n\nreturn {content: $input.first().json.message.content}\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -3760,
-        544
-      ],
-      "id": "789a668c-fa28-443e-87df-0c9df8d346d2",
-      "name": "Remove EM Dashes1"
-    },
-    {
-      "parameters": {
-        "resume": "webhook",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1,
-      "position": [
-        -1744,
-        704
-      ],
-      "id": "da3ca1b2-b1f0-4ca8-bba8-b9320ee4179e",
-      "name": "Wait For Approval2",
-      "webhookId": "139c56a4-5fdb-47b1-a3d4-15f158675783"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "817922d9-c16b-43ca-9032-fca6f79193d6",
-              "leftValue": "={{ $('Extract HTML Content').first().json.image }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -2864,
-        304
-      ],
-      "id": "bf6b8726-4d54-4b3e-9bb8-d9165b264f68",
-      "name": "If1"
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "jsonOutput": "{\n  \"posts\": [\n    \"CORS doesn't apply to Websockets. Wait! What? While building WebSocket and Socket.IO support for the web version of Sparrow API Tool, I learned something interesting: CORS doesn’t apply to WebSockets. Since WebSockets operate on their own protocol (ws:// or wss://) after the initial HTTP handshake, they aren’t restricted by CORS like HTTP requests. So, while an HTTP request might get blocked if sent directly from a browser instead of being routed through a proxy server, the same issue won't occur with a raw WebSocket connection. However, if you need to send custom headers with your WebSocket requests, a backend proxy server might still be necessary. On the other hand, Socket.IO has its own server-side CORS configuration, letting you control which origins can connect. Always something new to learn when building tools like Sparrow! We also have a giveaway active on our Instagram channel for some cool Sparrow Merchandise. Check out the pinned comment for more details.\",\n    \"ChatGPT or Stackoverflow? Recently I was able to build a completely functional vscode extension with the help of GPT-4o. I was able to complete this in a days time which would have taken multiple days if I relied solely on reading docs and searching Stackoverflow/Google. I think reading official docs is the best way to learn something but sometimes its just about doing a quick POC that can be implemented a lot faster with just being a little good at prompt engineering. So in this age of GenAI, do you use chatbots for generating boilerplates or starting on POCs? PS - Before this I had no knowledge of working with/creating a vscode extension. I had absolutely no idea on how to start.\",\n    \"But it runs on my Docker!!! I recently came across a strange problem where I was trying to setup a cron using crontab. The cron calls a simple python django rest api and sends email to users. All of this was made to run on Docker. The whole application was started, crontab was installed and cron was setup. All in the Dockerfile itself. It was running perfectly fine on my Docker Desktop, on my friends Docker Desktop and also on a hosted standalone VM. But strangely so, the cron was not getting invoked on the Kubernetes pod on which it was supposed to run. It would run if manually invoked but not in intervals. After weeks of trying to solve the problem, I had to shift to Advance Python Scheduler to do the same task from within the python code. Share in the comments if you think you can guess what the problem might be.\",\n  \"Normal People - You can achieve anything if you focus on ONE thing at a time. Meanwhile Software Engineers - 100+ Tabs opened Working on multiple requirements Having Multi screen setup for multiple projects Scrolling Instagram and sending memes while attending a scrum call\",\n  \"10x Faster Typescript COMPILER!!! Still there is an ongoing debate on why Microsoft didn't choose Rust or their own C# for this rewrite. Although, according to the team, Go was a better choice as it provided a similar structure and seamless transition. Had it been a ground-up rewrite and not a migration, Rust or C# would have been a better choice.\",\n  \"I recently started working on a Teams to Signal messenger bot after realizing that so many people outright hate using MS Teams, but since it's an industry standard, they cannot directly ditch it. My current goal is to support forwarding incoming text messages on Teams to a messenger like Signal. The second will be to give support for the reply mechanism from Signal and sync it to Teams. Coming to the technical stuff, I am thinking of using automation tools like Cypress or Playwright to do this. But it all boils down to the availability of public APIs of both messengers. I will try to document my progress here, as I might fail trying, like a lot of other times 😅 Let's see how it pans out. How would you approach this kind of problem?\",\n    \"Do you know about the require cache in Node.js? Lets say you have a js module that you have imported in a js file using require statement. It is highly possible that after a few iterations to your module code, the changes wont reflect even after you have reloaded the api server/modules. This happens because there is a module cache that happens. You need to invalidate it in order for the new changes to reflect. More on this here -\",\n    \"How important is Out-of-Box experience for an open source contributor? Nowadays I have been working on creating a seamless out-of-box experience for the new contributors of Sparrow API Tool. A poor app setup experience or hard-to-understand README file can be a serious dealbreaker for the community. I am emphasizing on the following things to make the setup as smooth as possible: 1) Created and hosted Docker images for various microservices like api-service and auth-service on DockerHub. 2) Created an all-in-one docker-compose file to set up everything from database to queue service in one command. 3) Created a migration script that generates a test user on app start—bypassing auth flow for instant contribution. 4) Documented multiple setup methods (Docker and non-Docker). 5) Pre-filled example .env files with required variables for copy-paste convenience. Let me know if you have suggestions to improve this further—I’m open to feedback!\"\n]\n}\n",
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -4336,
-        688
-      ],
-      "id": "f325d8c9-f15e-4ed6-8938-0da154bcb6a0",
-      "name": "Add Writing Examples",
-      "alwaysOutputData": false
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.message.text }}",
-        "options": {}
-      },
-      "id": "03e3bee8-89ae-4cd0-9f25-02b3dd2e5926",
-      "name": "Fetch Blog HTML",
+      "id": "4425abb0-4f88-4e82-b6f9-84bb7fb8f22c",
+      "name": "Download Google Image",
       "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -2192,
+        1208
+      ],
       "typeVersion": 4.2,
-      "position": [
-        -4784,
-        688
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "extractHtmlContent",
-        "extractionValues": {
-          "values": [
-            {
-              "key": "image",
-              "cssSelector": "meta[property='og:image']",
-              "returnValue": "attribute",
-              "attribute": "content"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "c4c34e97-49fb-4b5f-a756-a9d730813e29",
-      "name": "Extract HTML Content",
-      "type": "n8n-nodes-base.html",
-      "typeVersion": 1.2,
-      "position": [
-        -4560,
-        688
-      ]
+      "onError": "continueErrorOutput"
     }
   ],
   "connections": {
@@ -761,45 +1067,7 @@
       "main": [
         [
           {
-            "node": "Remove EM Dashes1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge Responses",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Wait For Approval": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send Approval Request": {
-      "main": [
-        [
-          {
-            "node": "Wait For Approval",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create Linkedin Post": {
-      "main": [
-        [
-          {
-            "node": "Send Post Created Message",
+            "node": "Process Json Output",
             "type": "main",
             "index": 0
           }
@@ -810,7 +1078,7 @@
       "main": [
         [
           {
-            "node": "Create Linkedin Post",
+            "node": "Create Post with Blog Image",
             "type": "main",
             "index": 0
           }
@@ -821,29 +1089,7 @@
       "main": [
         [
           {
-            "node": "Send Post Image1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send Approval Request1": {
-      "main": [
-        [
-          {
-            "node": "Wait For Approval2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send Post Image1": {
-      "main": [
-        [
-          {
-            "node": "Send Approval Request1",
+            "node": "Send AI Image",
             "type": "main",
             "index": 0
           }
@@ -854,7 +1100,7 @@
       "main": [
         [
           {
-            "node": "If1",
+            "node": "Blog Image Exists?",
             "type": "main",
             "index": 0
           }
@@ -868,18 +1114,14 @@
         ],
         [
           {
-            "node": "Merge Responses",
+            "node": "Generate Post Image",
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "Create Linkedin Post Again": {
-      "main": [
+        ],
         [
           {
-            "node": "Send Post Created Message Again",
+            "node": "Fetch Google Images",
             "type": "main",
             "index": 0
           }
@@ -890,29 +1132,7 @@
       "main": [
         [
           {
-            "node": "Create Linkedin Post Again",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge Code": {
-      "main": [
-        [
-          {
-            "node": "Generate Post Image",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge Responses": {
-      "main": [
-        [
-          {
-            "node": "Merge Code",
+            "node": "Create Post with AI Image",
             "type": "main",
             "index": 0
           }
@@ -938,57 +1158,6 @@
         [
           {
             "node": "Generate Post Image",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create Linkedin Post1": {
-      "main": [
-        [
-          {
-            "node": "Send Post Created Message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Remove EM Dashes1": {
-      "main": [
-        [
-          {
-            "node": "Send Approval Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait For Approval2": {
-      "main": [
-        [
-          {
-            "node": "Switch1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "Download Post Image",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Create Linkedin Post1",
             "type": "main",
             "index": 0
           }
@@ -1022,6 +1191,247 @@
         [
           {
             "node": "Add Writing Examples",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Send Choose Image Form",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Google Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Json Output": {
+      "main": [
+        [
+          {
+            "node": "Send Content Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Google Image links": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Google Image": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Google Images": {
+      "main": [
+        [
+          {
+            "node": "Get Google Image links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Choose Image Form": {
+      "main": [
+        [
+          {
+            "node": "Extract Chosen Image Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Chosen Image Link": {
+      "main": [
+        [
+          {
+            "node": "Download Selected Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Selected Image": {
+      "main": [
+        [
+          {
+            "node": "Create Post with Google Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Post with Google Image": {
+      "main": [
+        [
+          {
+            "node": "Send Ack - Google Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Content Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Wait for Content Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Content Approval": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Image Exists?": {
+      "main": [
+        [
+          {
+            "node": "Download Post Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Post w/o Blog Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Post w/o Blog Image": {
+      "main": [
+        [
+          {
+            "node": "Send Ack - Blog Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Post with Blog Image": {
+      "main": [
+        [
+          {
+            "node": "Send Ack - Blog Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send AI Image": {
+      "main": [
+        [
+          {
+            "node": "Send Approval for AI Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval for AI Image": {
+      "main": [
+        [
+          {
+            "node": "Wait For AI Image Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait For AI Image Approval": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Post with AI Image": {
+      "main": [
+        [
+          {
+            "node": "Send Ack - AI Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Responses": {
+      "main": [
+        [
+          {
+            "node": "Merge Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Google Image": {
+      "main": [
+        [
+          {
+            "node": "Send Google Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
