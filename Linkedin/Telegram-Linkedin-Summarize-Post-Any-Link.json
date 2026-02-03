@@ -435,7 +435,7 @@
       "typeVersion": 3,
       "position": [
         -2416,
-        1208
+        1216
       ],
       "id": "079839b9-e7e7-4992-a9bc-f240e411fcc0",
       "name": "Loop Over Items"
@@ -461,7 +461,7 @@
       "typeVersion": 2,
       "position": [
         -2640,
-        1208
+        1216
       ],
       "id": "7ba3ba67-3adb-440b-95cb-935d402a8885",
       "name": "Get Google Image links"
@@ -522,7 +522,7 @@
       "typeVersion": 4.3,
       "position": [
         -2864,
-        1208
+        1216
       ],
       "id": "5f90c7a3-a80f-4775-9719-4eeb3972bdf5",
       "name": "Fetch Google Images"
@@ -540,7 +540,7 @@
       "type": "n8n-nodes-base.telegram",
       "position": [
         -2192,
-        1016
+        1024
       ],
       "typeVersion": 1.2,
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
@@ -560,7 +560,7 @@
       "typeVersion": 2,
       "position": [
         -1968,
-        1016
+        1024
       ],
       "id": "28b09aba-fe06-4e5c-9f6b-beafbf7a3e73",
       "name": "Extract Chosen Image Link"
@@ -606,7 +606,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "position": [
         -1744,
-        1016
+        1024
       ],
       "typeVersion": 4.2
     },
@@ -625,7 +625,7 @@
       "type": "n8n-nodes-base.linkedIn",
       "position": [
         -1520,
-        1016
+        1024
       ],
       "typeVersion": 1,
       "credentials": {
@@ -649,7 +649,7 @@
       "type": "n8n-nodes-base.telegram",
       "position": [
         -1296,
-        1016
+        1024
       ],
       "webhookId": "2f6a8e48-73e6-4a05-92db-00aac290d8dd",
       "typeVersion": 1.2,
@@ -878,7 +878,7 @@
       "type": "n8n-nodes-base.telegram",
       "position": [
         -2640,
-        696
+        704
       ],
       "typeVersion": 1.2,
       "webhookId": "a4382527-54bb-4611-b709-283ac7763382",
@@ -929,7 +929,7 @@
       "type": "n8n-nodes-base.telegram",
       "position": [
         -2416,
-        696
+        704
       ],
       "typeVersion": 1.2,
       "webhookId": "f468b03f-9728-4831-bce6-6727dccacea3",
@@ -949,7 +949,7 @@
       "typeVersion": 1,
       "position": [
         -2192,
-        696
+        704
       ],
       "id": "da3ca1b2-b1f0-4ca8-bba8-b9320ee4179e",
       "name": "Wait For AI Image Approval",
@@ -1045,7 +1045,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "position": [
         -2192,
-        1208
+        1216
       ],
       "typeVersion": 4.2,
       "onError": "continueErrorOutput"
